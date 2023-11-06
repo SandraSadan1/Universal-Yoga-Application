@@ -1,2 +1,2 @@
-# University-Yoga-Application
+# Universal-Yoga-Application
 This is an app to create an Admin and Customer application
