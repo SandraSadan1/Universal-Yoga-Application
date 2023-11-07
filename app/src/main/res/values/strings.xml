@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">Yoga Academy</string>
+    <!-- Course labels -->
+    <string name="page_title">Course Details</string>
+    <string name="day_of_week">Day of the Week:</string>
+    <string name="start_time_of_course">Start Time:</string>
+    <string name="end_time_of_course">End Time:</string>
+    <string name="capacity">Capacity:</string>
+    <string name="duration">Duration (Minutes):</string>
+    <string name="price_per_class">Price per Class (£):</string>
+    <string name="yoga_type">Yoga Type:</string>
+    <string name="description">Description:</string>
+    <!-- Days of Week -->
+    <string-array name="days_of_week">
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+    </string-array>
+    <!-- Days of Week -->
+    <string-array name="type_of_yoga">
+        <item>Aerial Yoga</item>
+        <item>Family Yoga</item>
+        <item>Flow Yoga</item>
+    </string-array>
+</resources>
