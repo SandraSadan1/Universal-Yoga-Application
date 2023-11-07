@@ -6,7 +6,7 @@
     <string name="start_time_of_course">Start Time:</string>
     <string name="end_time_of_course">End Time:</string>
     <string name="capacity">Capacity:</string>
-    <string name="duration">Duration:</string>
+    <string name="duration">Duration (Minutes):</string>
     <string name="price_per_class">Price per Class (£):</string>
     <string name="yoga_type">Yoga Type:</string>
     <string name="description">Description:</string>

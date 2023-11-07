@@ -45,7 +45,6 @@
 
         <!-- Day Of the Week -->
 
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -215,17 +214,16 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp" />
 
-        <!-- Add  additional fields -->
-
-
         <Button
             android:id="@+id/submitButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
             android:layout_below="@id/description"
             android:layout_centerHorizontal="true"
             android:text="Submit" />
-
     </LinearLayout>
     </ScrollView>
 </RelativeLayout>
