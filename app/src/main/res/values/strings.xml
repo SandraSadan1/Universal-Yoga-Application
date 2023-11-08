@@ -3,8 +3,7 @@
     <!-- Course labels -->
     <string name="page_title">Course Details</string>
     <string name="day_of_week">Day of the Week:</string>
-    <string name="start_time_of_course">Start Time:</string>
-    <string name="end_time_of_course">End Time:</string>
+    <string name="time_of_course">Time of Course:</string>
     <string name="capacity">Capacity:</string>
     <string name="duration">Duration (Minutes):</string>
     <string name="price_per_class">Price per Class (£):</string>
