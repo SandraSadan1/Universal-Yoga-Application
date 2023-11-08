@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         // Initialize the database helper with the application context
         dbHelper = new MyDatabaseHelper(this);
@@ -193,5 +195,9 @@ public class MainActivity extends AppCompatActivity {
         db.close();
         dbHelper.close(); // Close the database
         super.onDestroy();
+    }
+    public void navigateToHome(View view) {
+        Intent intent = new Intent(this, HomeActivity.class); // Replace HomeActivity with the name of your home screen activity
+        startActivity(intent);
     }
 }

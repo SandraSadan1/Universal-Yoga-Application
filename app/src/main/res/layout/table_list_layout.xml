@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/pageHeading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Yoga Academy"
+            android:layout_gravity="center"
+            android:textSize="24sp"
+            android:padding="16dp"
+            android:textColor="#006400"/>
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:orientation="horizontal" >
+        <!--<Spinner
+            android:id="@+id/daySelector"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>-->
+        <Button
+            android:id="@+id/btnupload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Upload"
+            android:layout_marginBottom="14dp"
+            android:layout_gravity="right"/>
+    </LinearLayout>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <HorizontalScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:stretchColumns="*">
+
+                <!-- Table header row -->
+                <TableRow >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Day"
+                        android:padding="10dp"
+                        android:gravity="center"
+                        android:background="#EEEEEE"
+                        android:textColor="#006400"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Start Time"
+                        android:padding="10dp"
+                        android:gravity="center"
+                        android:background="#EEEEEE"
+                        android:textColor="#006400"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="End Time"
+                        android:padding="10dp"
+                        android:gravity="center"
+                        android:background="#EEEEEE"
+                        android:textColor="#006400"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Capacity"
+                        android:padding="10dp"
+                        android:gravity="center"
+                        android:background="#EEEEEE"
+                        android:textColor="#006400"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Duration"
+                        android:padding="10dp"
+                        android:gravity="center"
+                        android:background="#EEEEEE"
+                        android:textColor="#006400"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Price per Class"
+                        android:padding="10dp"
+                        android:gravity="center"
+                        android:background="#EEEEEE"
+                        android:textColor="#006400"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Yoga Type"
+                        android:padding="10dp"
+                        android:gravity="center"
+                        android:background="#EEEEEE"
+                        android:textColor="#006400"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Description"
+                        android:padding="10dp"
+                        android:gravity="center"
+                        android:background="#EEEEEE"
+                        android:textColor="#006400"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Action"
+                        android:padding="10dp"
+                        android:gravity="center"
+                        android:layout_span="2"
+                        android:background="#EEEEEE"
+                        android:textColor="#006400"/>
+
+
+                    <!-- Add more header columns as needed -->
+                </TableRow>
+
+                <!-- Table rows for listing items -->
+                <TableRow>
+
+
+                    <ImageView
+                        android:id="@+id/edit"
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:layout_marginTop="2dp"
+                        android:contentDescription="edit"
+                        android:src="@drawable/edit" >
+                    </ImageView>
+
+                    <ImageView
+                        android:id="@+id/del"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginTop="2dp"
+                        android:contentDescription="Delete"
+                        android:src="@drawable/delete">
+
+                    </ImageView>
+
+                    <!-- Add more columns with item details -->
+                </TableRow>
+
+                <!-- Add more rows for additional items -->
+
+            </TableLayout>
+            </HorizontalScrollView>
+        </ScrollView>
+
+
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

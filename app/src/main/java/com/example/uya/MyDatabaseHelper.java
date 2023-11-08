@@ -10,24 +10,24 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 13;
 
     // Table and column names
-    private static final String TABLE_NAME = "course_details";
-    private static final String ID = "id";
-    private static final String DAY = "day";
-    private static final String DURATION = "duration";
-    private static final String CAPACITY = "capacity";
-    private static final String PRICE = "price";
-    private static final String START_TIME = "start_time";
-    private static final String END_TIME = "end_time";
-    private static final String YOGA_TYPE = "yoga_type";
-    private static final String DESCRIPTION = "description";
+    public static final String TABLE_NAME = "course_details";
+    public static final String ID = "id";
+    public static final String DAY = "day";
+    public static final String DURATION = "duration";
+    public static final String CAPACITY = "capacity";
+    public static final String PRICE = "price";
+    public static final String START_TIME = "start_time";
+    public static final String END_TIME = "end_time";
+    public static final String YOGA_TYPE = "yoga_type";
+    public static final String DESCRIPTION = "description";
 
     // Define an array of column names for easy access
-    private static final String[] COLUMNS = {
+    public static final String[] COLUMNS = {
             ID, DAY, DURATION, CAPACITY, PRICE, START_TIME, END_TIME, YOGA_TYPE, DESCRIPTION
     };
 
     // Define SQL statements as constants
-    private static final String CREATE_TABLE =
+    public static final String CREATE_TABLE =
             "CREATE TABLE " + TABLE_NAME + " (" +
                     ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     DAY + " TEXT, " +
