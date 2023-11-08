@@ -7,7 +7,7 @@ import android.util.Log;
 
 public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "UniversalYogaApp";
-    private static final int DATABASE_VERSION = 13;
+    private static final int DATABASE_VERSION = 14;
 
     // Table and column names
     private static final String TABLE_NAME = "course_details";
@@ -16,14 +16,13 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final String DURATION = "duration";
     private static final String CAPACITY = "capacity";
     private static final String PRICE = "price";
-    private static final String START_TIME = "start_time";
-    private static final String END_TIME = "end_time";
+    private static final String COURSE_TIME = "course_time";
     private static final String YOGA_TYPE = "yoga_type";
     private static final String DESCRIPTION = "description";
 
     // Define an array of column names for easy access
     private static final String[] COLUMNS = {
-            ID, DAY, DURATION, CAPACITY, PRICE, START_TIME, END_TIME, YOGA_TYPE, DESCRIPTION
+            ID, DAY, DURATION, CAPACITY, PRICE, COURSE_TIME, YOGA_TYPE, DESCRIPTION
     };
 
     // Define SQL statements as constants
@@ -33,8 +32,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                     DAY + " TEXT, " +
                     DURATION + " TEXT, " +
                     PRICE + " INTEGER, " +
-                    START_TIME + " TEXT, " +
-                    END_TIME + " TEXT, " +
+                    COURSE_TIME + " TEXT, " +
                     YOGA_TYPE + " TEXT, " +
                     CAPACITY + " TEXT, " +
                     DESCRIPTION + " TEXT" +
