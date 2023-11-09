@@ -16,6 +16,14 @@
         android:layout_marginTop="10dp"
         android:orientation="vertical"
         android:padding="16dp">
+        <ImageView
+            android:id="@+id/homeButton"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:src="@drawable/home_icon"
+            android:clickable="true"
+            android:onClick="navigateToHome"
+            />
 
         <!-- View Application Name Label -->
 
