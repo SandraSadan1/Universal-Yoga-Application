@@ -5,8 +5,7 @@ public class YogaCourse {
     private String day;
     private String duration;
     private int price;
-    private String startTime;
-    private String endTime;
+    private String timeOfCourse;
     private String yogaType;
     private String capacity;
     private String description;
@@ -16,13 +15,12 @@ public class YogaCourse {
         // Default constructor
     }
 
-    public YogaCourse(int id, String day, String duration, int price, String startTime, String endTime, String yogaType, String capacity, String description) {
+    public YogaCourse(int id, String day, String duration, int price, String timeOfCourse, String yogaType, String capacity, String description) {
         this.id = id;
         this.day = day;
         this.duration = duration;
         this.price = price;
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this.timeOfCourse = timeOfCourse;
         this.yogaType = yogaType;
         this.capacity = capacity;
         this.description = description;
@@ -46,11 +44,7 @@ public class YogaCourse {
     }
 
     public String getStartTime() {
-        return startTime;
-    }
-
-    public String getEndTime() {
-        return endTime;
+        return timeOfCourse;
     }
 
     public String getYogaType() {
@@ -82,12 +76,8 @@ public class YogaCourse {
         this.price = price;
     }
 
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
+    public void setTimeOfCourse(String startTime) {
+        this.timeOfCourse = timeOfCourse;
     }
 
     public void setYogaType(String yogaType) {

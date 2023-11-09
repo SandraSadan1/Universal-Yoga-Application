@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TimePicker;
 import android.widget.Toast;
 import android.util.Log;
 import com.example.uya.model.YogaCourse;
@@ -24,8 +23,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private EditText startTime;
-    private EditText endTime;
+    private EditText timeOfCourse;
     private EditText capacity;
     private EditText duration;
     private EditText pricePerClass;
@@ -37,12 +35,9 @@ public class MainActivity extends AppCompatActivity {
     private static final String DURATION = "duration";
     private static final String CAPACITY = "capacity";
     private static final String PRICE = "price";
-    private static final String START_TIME = "start_time";
-    private static final String END_TIME = "end_time";
+    private static final String TIME_OF_COURSE = "course_time";
     private static final String YOGA_TYPE = "yoga_type";
     private static final String DESCRIPTION = "description";
-
-    private Button submitButton;
     private static final String TAG = "Universal Yoga Application";
     private MyDatabaseHelper dbHelper;
     private SQLiteDatabase db;
@@ -58,17 +53,15 @@ public class MainActivity extends AppCompatActivity {
         db = dbHelper.getWritableDatabase(); // Open the database for writing
 
         dayOfWeek = findViewById(R.id.dayOfWeek);
-        startTime = findViewById(R.id.startTime);
-        endTime = findViewById(R.id.endTime);
+        timeOfCourse = findViewById(R.id.timeOfCourse);
         capacity = findViewById(R.id.capacity);
         duration = findViewById(R.id.duration);
         pricePerClass = findViewById(R.id.pricePerClass);
         description = findViewById(R.id.description);
         yogaType = findViewById(R.id.typeOfClass);
 
-        startTime.setOnClickListener(view -> showTimePickerDialog(startTime));
-        endTime.setOnClickListener(view -> showTimePickerDialog(endTime));
-        submitButton = findViewById(R.id.submitButton);
+        timeOfCourse.setOnClickListener(view -> showTimePickerDialog(timeOfCourse));
+        Button submitButton = findViewById(R.id.submitButton);
         submitButton.setOnClickListener(view -> validateAndSubmitForm());
     }
 
@@ -88,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void clearAllEditTextFields() {
-        EditText[] fields = {startTime, endTime, capacity, duration, pricePerClass, description};
+        EditText[] fields = {timeOfCourse, capacity, duration, pricePerClass, description};
         for (EditText field : fields) {
             field.setText("");
         }
@@ -96,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void validateAndSubmitForm() {
         boolean isValid = true;
-        EditText[] fields = {startTime, endTime, capacity, duration, pricePerClass};
+        EditText[] fields = {timeOfCourse, capacity, duration, pricePerClass};
 
         for (EditText field : fields) {
             String fieldValue = field.getText().toString().trim();
@@ -125,8 +118,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-            values.put(START_TIME, startTime.getText().toString());
-            values.put(END_TIME, endTime.getText().toString());
+            values.put(TIME_OF_COURSE, timeOfCourse.getText().toString());
             values.put(YOGA_TYPE, yogaType.getSelectedItem().toString());
             values.put(CAPACITY, capacity.getText().toString());
             values.put(DESCRIPTION, description.getText().toString());
@@ -152,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
     public List<YogaCourse> getAllYogaCourses() {
         List<YogaCourse> yogaCourses = new ArrayList<>();
 
-        String[] columns = {ID, DAY, DURATION, PRICE, START_TIME, END_TIME, YOGA_TYPE, CAPACITY, DESCRIPTION};
+        String[] columns = {ID, DAY, DURATION, PRICE, TIME_OF_COURSE, YOGA_TYPE, CAPACITY, DESCRIPTION};
         String selection = null;
         String[] selectionArgs = null;
 
@@ -162,20 +154,19 @@ public class MainActivity extends AppCompatActivity {
             if (cursor != null && cursor.moveToFirst()) {
                 do {
                     // Retrieve data from the Cursor and create a YogaCourse object
-                    int id = cursor.getInt(cursor.getColumnIndex(ID));
-                    String day = cursor.getString(cursor.getColumnIndex(DAY));
-                    String duration = cursor.getString(cursor.getColumnIndex(DURATION));
-                    int price = cursor.getInt(cursor.getColumnIndex(PRICE));
-                    String startTime = cursor.getString(cursor.getColumnIndex(START_TIME));
-                    String endTime = cursor.getString(cursor.getColumnIndex(END_TIME));
-                    String yogaType = cursor.getString(cursor.getColumnIndex(YOGA_TYPE));
-                    String capacity = cursor.getString(cursor.getColumnIndex(CAPACITY));
-                    String desc = cursor.getString(cursor.getColumnIndex(DESCRIPTION));
+                    int id = cursor.getInt(cursor.getColumnIndexOrThrow(ID));
+                    String day = cursor.getString(cursor.getColumnIndexOrThrow(DAY));
+                    String duration = cursor.getString(cursor.getColumnIndexOrThrow(DURATION));
+                    int price = cursor.getInt(cursor.getColumnIndexOrThrow(PRICE));
+                    String timeOfCourse = cursor.getString(cursor.getColumnIndexOrThrow(TIME_OF_COURSE));
+                    String yogaType = cursor.getString(cursor.getColumnIndexOrThrow(YOGA_TYPE));
+                    String capacity = cursor.getString(cursor.getColumnIndexOrThrow(CAPACITY));
+                    String desc = cursor.getString(cursor.getColumnIndexOrThrow(DESCRIPTION));
 
-                    YogaCourse yogaCourse = new YogaCourse(id, day, duration, price, startTime, endTime, yogaType, capacity, desc);
+                    YogaCourse yogaCourse = new YogaCourse(id, day, duration, price, timeOfCourse, yogaType, capacity, desc);
                     yogaCourses.add(yogaCourse);
                     // Display the data in the log
-                    Log.d("Data", "ID: " + id + ", Day: " + day + ", Duration: " + duration + ", Price: " + price + ", Start Time: " + startTime + ", End Time: " + endTime + ", Yoga Type: " + yogaType + ", Capacity: " + capacity + ", Description: " + description);
+                    Log.d("Data", "ID: " + id + ", Day: " + day + ", Duration: " + duration + ", Price: " + price + ", " + "Course Time: " + timeOfCourse + ", Yoga Type: " + yogaType + ", Capacity: " + capacity + ", Description: " + description);
                 } while (cursor.moveToNext());
 
                 cursor.close();

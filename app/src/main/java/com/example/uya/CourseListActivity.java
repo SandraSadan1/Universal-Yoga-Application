@@ -1,5 +1,14 @@
 package com.example.uya;
 
+import static com.example.uya.MyDatabaseHelper.CAPACITY;
+import static com.example.uya.MyDatabaseHelper.COURSE_TIME;
+import static com.example.uya.MyDatabaseHelper.DAY;
+import static com.example.uya.MyDatabaseHelper.DESCRIPTION;
+import static com.example.uya.MyDatabaseHelper.DURATION;
+import static com.example.uya.MyDatabaseHelper.ID;
+import static com.example.uya.MyDatabaseHelper.PRICE;
+import static com.example.uya.MyDatabaseHelper.YOGA_TYPE;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -42,17 +51,16 @@ public class CourseListActivity extends AppCompatActivity {
                 if (cursor != null && cursor.moveToFirst()) {
                     do {
                         // Extract data from the cursor and create YogaCourse objects
-                        int id = cursor.getInt(cursor.getColumnIndex(MyDatabaseHelper.ID));
-                        String day = cursor.getString(cursor.getColumnIndex(MyDatabaseHelper.DAY));
-                        String duration = cursor.getString(cursor.getColumnIndex(MyDatabaseHelper.DURATION));
-                        int price = cursor.getInt(cursor.getColumnIndex(MyDatabaseHelper.PRICE));
-                        String startTime = cursor.getString(cursor.getColumnIndex(MyDatabaseHelper.START_TIME));
-                        String endTime = cursor.getString(cursor.getColumnIndex(MyDatabaseHelper.END_TIME));
-                        String yogaType = cursor.getString(cursor.getColumnIndex(MyDatabaseHelper.YOGA_TYPE));
-                        String capacity = cursor.getString(cursor.getColumnIndex(MyDatabaseHelper.CAPACITY));
-                        String desc = cursor.getString(cursor.getColumnIndex(MyDatabaseHelper.DESCRIPTION));
+                        int id = cursor.getInt(cursor.getColumnIndexOrThrow(ID));
+                        String day = cursor.getString(cursor.getColumnIndexOrThrow(DAY));
+                        String duration = cursor.getString(cursor.getColumnIndexOrThrow(DURATION));
+                        int price = cursor.getInt(cursor.getColumnIndexOrThrow(PRICE));
+                        String timeOfCourse = cursor.getString(cursor.getColumnIndexOrThrow(COURSE_TIME));
+                        String yogaType = cursor.getString(cursor.getColumnIndexOrThrow(YOGA_TYPE));
+                        String capacity = cursor.getString(cursor.getColumnIndexOrThrow(CAPACITY));
+                        String desc = cursor.getString(cursor.getColumnIndexOrThrow(DESCRIPTION));
 
-                        YogaCourse yogaCourse = new YogaCourse(id, day, duration, price, startTime, endTime, yogaType, capacity, desc);
+                        YogaCourse yogaCourse = new YogaCourse(id, day, duration, price, timeOfCourse, yogaType, capacity, desc);
                         yogaCourses.add(yogaCourse);
                     } while (cursor.moveToNext());
                 }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="10dp"
+    android:layout_marginStart="10dp"
     tools:context=".MainActivity">
     <ScrollView
             android:layout_width="match_parent"
@@ -30,7 +30,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="100dp"
+            android:layout_marginStart="100dp"
             android:layout_marginTop="12dp"
             android:padding="6dp"
             android:text="@string/app_name"
@@ -73,54 +73,24 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp" />
 
-        <LinearLayout
-            android:layout_width="fill_parent"
+        <!-- Start Time of Course -->
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:orientation="horizontal" >
+            android:layout_gravity="center_vertical"
+            android:paddingEnd="8dp"
+            android:paddingStart="8dp"
+            android:text="@string/time_of_course"
+            android:textColor="#359c5e"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-            <!-- Start Time of Course -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:paddingEnd="8dp"
-                android:paddingStart="8dp"
-                android:text="@string/start_time_of_course"
-                android:textColor="#359c5e"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/startTime"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:focusable="false"
-                android:hint="Start Time"
-                tools:ignore="TouchTargetSizeCheck" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:paddingEnd="8dp"
-                android:paddingStart="8dp"
-                android:text="@string/end_time_of_course"
-                android:textColor="#359c5e"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/endTime"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/startTime"
-                android:layout_weight="1"
-                android:focusable="false"
-                android:hint="End Time"
-                tools:ignore="TouchTargetSizeCheck" />
-        </LinearLayout>
+        <EditText
+            android:id="@+id/timeOfCourse"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            tools:ignore="TouchTargetSizeCheck" />
 
         <!-- Capacity -->
 
@@ -137,7 +107,6 @@
             android:id="@+id/capacity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Capacity"
             android:minHeight="48dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp" />
@@ -156,7 +125,6 @@
             android:id="@+id/duration"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Duration"
             android:minHeight="48dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp" />
@@ -176,7 +144,6 @@
             android:id="@+id/pricePerClass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Price Per Class"
             android:minHeight="48dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp" />
@@ -217,7 +184,6 @@
             android:id="@+id/description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Description"
             android:minHeight="48dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp" />
