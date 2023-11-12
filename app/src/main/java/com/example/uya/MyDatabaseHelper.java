@@ -16,11 +16,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     public static final String COURSE_TIME = "course_time";
     public static final String YOGA_TYPE = "yoga_type";
     public static final String DESCRIPTION = "description";
-    // Define an array of column names for easy access
-    private static final String[] COLUMNS = {
-            ID, DAY, DURATION, CAPACITY, PRICE, COURSE_TIME, YOGA_TYPE, DESCRIPTION
-    };
-    // Define SQL statements as constants
     private static final String CREATE_TABLE =
             "CREATE TABLE " + TABLE_NAME + " (" +
                     ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +

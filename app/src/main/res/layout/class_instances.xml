@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg5">
+
+    <ImageView
+        android:id="@+id/homeButtonClass"
+        android:layout_width="24dp"
+        android:layout_height="48dp"
+        android:src="@drawable/home_icon"
+        android:clickable="true"
+        android:onClick="navigateToHomeFromClass"
+        android:contentDescription="Home Button"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"/>
+
+    <!-- Application Name Label -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:padding="8dp"
+        android:text="@string/app_name"
+        android:textColor="@color/customTextColor"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="50dp"
+            android:padding="8dp">
+
+        <!-- Title Label -->
+        <TextView
+            android:id="@+id/titleLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="12dp"
+            android:text="@string/class_title"
+            android:textColor="@color/customTextColor"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/dateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Choose Date"
+            android:textColor="@color/customTextColor"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"/>
+
+        <EditText
+            android:id="@+id/dateEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/dateTextView"
+            android:layout_marginTop="8dp"
+            android:focusable="false"
+            android:hint="Choose date to proceed"
+            tools:ignore="TouchTargetSizeCheck"/>
+
+        <!-- Day Of the Week -->
+        <TextView
+            android:id="@+id/dayTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="6dp"
+            android:text="@string/day_of_week"
+            android:textColor="@color/customTextColor"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/dayEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/dateTextView"
+            android:layout_marginTop="8dp"
+            android:focusable="false"
+            android:enabled="false"
+            android:hint="Choose Date to display the day"
+            tools:ignore="TouchTargetSizeCheck"/>
+
+        <!-- Type of Yoga Class -->
+        <TextView
+            android:id="@+id/yogaTypeTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="6dp"
+            android:text="@string/yoga_type"
+            android:textColor="@color/customTextColor"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <Spinner
+            android:id="@+id/typeOfClass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:entries="@array/type_of_yoga"
+            android:minHeight="48dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp" />
+
+        <TextView
+            android:id="@+id/timeView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Choose Time"
+            android:visibility="invisible"
+            android:textColor="@color/customTextColor"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:padding="6dp" />
+
+        <Spinner
+            android:id="@+id/timeEditView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/time_slots"
+            android:minHeight="48dp"
+            android:visibility="invisible"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp" />
+
+        <TextView
+            android:id="@+id/teacherTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="6dp"
+            android:text="@string/yoga_teacher"
+            android:textColor="@color/customTextColor"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/teacherEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/dateTextView"
+            android:layout_marginTop="8dp"
+            android:hint="Add teacher name"
+            android:minHeight="48dp" />
+
+        <Button
+            android:id="@+id/submitButton"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="Submit" />
+
+</LinearLayout>
+
+</RelativeLayout>

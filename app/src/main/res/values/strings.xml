@@ -8,7 +8,7 @@
     <string name="duration">Duration (Minutes):</string>
     <string name="price_per_class">Price per Class (£):</string>
     <string name="yoga_type">Yoga Type:</string>
-    <string name="description">Description:</string>
+    <string name="description">Description (Optional):</string>
     <!-- Days of Week -->
     <string-array name="days_of_week">
         <item>Monday</item>
@@ -25,10 +25,16 @@
         <item>Family Yoga</item>
         <item>Flow Yoga</item>
     </string-array>
-
+    <!-- Yoga Class labels -->
+    <string name="class_title">Class Details</string>
+    <string name="yoga_teacher">Teacher Name:</string>
+    <string-array name="time_slots">
+        <item>No Slots Available</item>
+    </string-array>
 
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <string name="no_time_slots_available">No slots available for the selected day and type of yoga</string>
 
 
 </resources>
