@@ -137,6 +137,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="6dp"
+            android:visibility="invisible"
             android:text="@string/yoga_teacher"
             android:textColor="@color/customTextColor"
             android:textSize="18sp"
@@ -146,13 +147,35 @@
             android:id="@+id/teacherEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/dateTextView"
+            android:visibility="invisible"
+            android:layout_below="@id/teacherTextView"
             android:layout_marginTop="8dp"
-            android:hint="Add teacher name"
+            android:hint="Enter teacher name"
+            android:minHeight="48dp" />
+
+        <TextView
+            android:id="@+id/commentsTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="6dp"
+            android:text="@string/comments"
+            android:visibility="invisible"
+            android:textColor="@color/customTextColor"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/commentsEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:layout_below="@id/commentsTextView"
+            android:layout_marginTop="8dp"
+            android:hint="Enter any comments"
             android:minHeight="48dp" />
 
         <Button
-            android:id="@+id/submitButton"
+            android:id="@+id/submitButtonClass"
             android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
