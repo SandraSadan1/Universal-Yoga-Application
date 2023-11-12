@@ -5,8 +5,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 public class MyDatabaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "UniversalYogaApp";
-    public static final int DATABASE_VERSION = 15;
-    // Table and column names
+    public static final int DATABASE_VERSION = 18;
+    // Course details table and column names
     public static final String TABLE_NAME = "course_details";
     public static final String ID = "id";
     public static final String DAY = "day";
@@ -27,19 +27,35 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                     CAPACITY + " TEXT, " +
                     DESCRIPTION + " TEXT" +
                     ")";
+    // Yoga class table and column names
+    public static final String TABLE_YOGA_CLASS = "yoga_class";
+    public static final String COURSE_ID = "course_id";
+    public static final String DATE = "course_date";
+    public static final String TEACHER_NAME = "teacher_name";
+    public static final String COMMENTS = "comments";
+    private static final String CREATE_YOGA_CLASS_TABLE =
+            "CREATE TABLE " + TABLE_YOGA_CLASS + " (" +
+                    ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    COURSE_ID + " INTEGER, " +
+                    DATE + " TEXT, " +
+                    TEACHER_NAME + " TEXT, " +
+                    COMMENTS + " TEXT" +
+                    ")";
     public MyDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
         Log.d("MyDatabaseHelper", "onCreate method is executed");
-        db.execSQL(CREATE_TABLE);
+        db.execSQL(CREATE_TABLE); // for course details
+        db.execSQL(CREATE_YOGA_CLASS_TABLE); // for yoga class
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion < newVersion) {
             // Drop the old table (if it exists)
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_YOGA_CLASS);
             // Recreate the table with the new schema
             onCreate(db);
         }

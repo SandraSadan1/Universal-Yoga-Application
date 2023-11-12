@@ -28,6 +28,7 @@
     <!-- Yoga Class labels -->
     <string name="class_title">Class Details</string>
     <string name="yoga_teacher">Teacher Name:</string>
+    <string name="comments">Comments (Optional):</string>
     <string-array name="time_slots">
         <item>No Slots Available</item>
     </string-array>
