@@ -43,7 +43,7 @@ public class YogaCourse {
         return price;
     }
 
-    public String getStartTime() {
+    public String getTimeOfCourse() {
         return timeOfCourse;
     }
 
@@ -76,7 +76,7 @@ public class YogaCourse {
         this.price = price;
     }
 
-    public void setTimeOfCourse(String startTime) {
+    public void setTimeOfCourse(String timeOfCourse) {
         this.timeOfCourse = timeOfCourse;
     }
 

@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String DURATION = "duration";
     private static final String CAPACITY = "capacity";
     private static final String PRICE = "price";
-    private static final String TIME_OF_COURSE = "course_time";
+    private static final String COURSE_TIME = "course_time";
     private static final String YOGA_TYPE = "yoga_type";
     private static final String DESCRIPTION = "description";
     private static final String TAG = "Universal Yoga Application";
@@ -103,48 +103,67 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (isValid) {
-            ContentValues values = new ContentValues();
-            values.put(DAY, dayOfWeek.getSelectedItem().toString());
-            values.put(DURATION, duration.getText().toString());
+            // Check if a record with the same yoga type, day and time already exists
+            String day = dayOfWeek.getSelectedItem().toString();
+            String time = timeOfCourse.getText().toString();
+            String typeOfYoga = yogaType.getSelectedItem().toString();
+            if (courseExists(day, time, typeOfYoga)) {
+                Toast.makeText(this, "Same yoga course already exists for the selected day and time", Toast.LENGTH_SHORT).show();
+                timeOfCourse.setError("A type of yoga course with the same day and time already exists");
+            } else {
+                ContentValues values = new ContentValues();
+                values.put(DAY, day);
+                values.put(DURATION, duration.getText().toString());
 
-            String priceValue = pricePerClass.getText().toString().trim();
-            if (!priceValue.isEmpty()) {
-                try {
-                    int price = Integer.parseInt(priceValue);
-                    values.put(PRICE, price);
-                } catch (NumberFormatException e) {
-                    pricePerClass.setError("Invalid price format");
-                    isValid = false;
-                }
-            }
-
-            values.put(TIME_OF_COURSE, timeOfCourse.getText().toString());
-            values.put(YOGA_TYPE, yogaType.getSelectedItem().toString());
-            values.put(CAPACITY, capacity.getText().toString());
-            values.put(DESCRIPTION, description.getText().toString());
-
-            if (isValid) {
-                try {
-                    long newRowId = db.insert("course_details", null, values);
-                    if (newRowId != -1) {
-                        clearAllEditTextFields(); // Clear fields after successful submission
-                        Toast.makeText(this, "Course added successfully", Toast.LENGTH_SHORT).show();
-                        getAllYogaCourses();
-                    } else {
-                        Log.d(TAG, "Insertion failed");
+                String priceValue = pricePerClass.getText().toString().trim();
+                if (!priceValue.isEmpty()) {
+                    try {
+                        int price = Integer.parseInt(priceValue);
+                        values.put(PRICE, price);
+                    } catch (NumberFormatException e) {
+                        pricePerClass.setError("Invalid price format");
+                        isValid = false;
                     }
-                } catch (SQLException e) {
-                    Log.e(TAG, "Database error: " + e.getMessage());
-                    // Handle the error
+                }
+
+                values.put(COURSE_TIME, time);
+                values.put(YOGA_TYPE, yogaType.getSelectedItem().toString());
+                values.put(CAPACITY, capacity.getText().toString());
+                values.put(DESCRIPTION, description.getText().toString());
+
+                if (isValid) {
+                    try {
+                        long newRowId = db.insert("course_details", null, values);
+                        if (newRowId != -1) {
+                            clearAllEditTextFields(); // Clear fields after successful submission
+                            Toast.makeText(this, "Course added successfully", Toast.LENGTH_SHORT).show();
+                            getAllYogaCourses();
+                        } else {
+                            Log.d(TAG, "Insertion failed");
+                        }
+                    } catch (SQLException e) {
+                        Log.e(TAG, "Database error: " + e.getMessage());
+                        // Handle the error
+                    }
                 }
             }
         }
     }
 
+    // Function to check if a course with the same day and time already exists
+    private boolean courseExists(String day, String time, String typeOfYoga) {
+        SQLiteDatabase database = dbHelper.getReadableDatabase();
+        Cursor cursor = database.rawQuery("SELECT COUNT(*) FROM course_details WHERE DAY = ? AND COURSE_TIME = ? AND YOGA_TYPE = ?", new String[]{day, time, typeOfYoga});
+        cursor.moveToFirst();
+        int count = cursor.getInt(0);
+        cursor.close();
+        return count > 0;
+    }
+
     public List<YogaCourse> getAllYogaCourses() {
         List<YogaCourse> yogaCourses = new ArrayList<>();
 
-        String[] columns = {ID, DAY, DURATION, PRICE, TIME_OF_COURSE, YOGA_TYPE, CAPACITY, DESCRIPTION};
+        String[] columns = {ID, DAY, DURATION, PRICE, COURSE_TIME, YOGA_TYPE, CAPACITY, DESCRIPTION};
         String selection = null;
         String[] selectionArgs = null;
 
@@ -158,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
                     String day = cursor.getString(cursor.getColumnIndexOrThrow(DAY));
                     String duration = cursor.getString(cursor.getColumnIndexOrThrow(DURATION));
                     int price = cursor.getInt(cursor.getColumnIndexOrThrow(PRICE));
-                    String timeOfCourse = cursor.getString(cursor.getColumnIndexOrThrow(TIME_OF_COURSE));
+                    String timeOfCourse = cursor.getString(cursor.getColumnIndexOrThrow(COURSE_TIME));
                     String yogaType = cursor.getString(cursor.getColumnIndexOrThrow(YOGA_TYPE));
                     String capacity = cursor.getString(cursor.getColumnIndexOrThrow(CAPACITY));
                     String desc = cursor.getString(cursor.getColumnIndexOrThrow(DESCRIPTION));
@@ -188,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
     public void navigateToHome(View view) {
-        Intent intent = new Intent(this, HomeActivity.class); // Replace HomeActivity with the name of your home screen activity
+        Intent intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
     }
 }

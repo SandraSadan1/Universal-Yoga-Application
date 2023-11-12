@@ -51,7 +51,7 @@ public class CourseListActivity extends AppCompatActivity {
             row.addView(dayTextView);
 
             TextView timeTextView = new TextView(this);
-            timeTextView.setText(course.getStartTime());
+            timeTextView.setText(course.getTimeOfCourse());
             row.addView(timeTextView);
 
             TextView durationTextView = new TextView(this);
