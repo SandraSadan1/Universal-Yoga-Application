@@ -35,7 +35,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void showPopup() {
-        String[] items = new String[]{"Add Course", "List Course", "Add Class"};
+        String[] items = new String[]{"Add Course", "List Course", "Add Class", "List Class"};
 
         ListPopupWindow popup = new ListPopupWindow(this);
         popup.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, items));
@@ -72,6 +72,11 @@ public class HomeActivity extends AppCompatActivity {
             Intent intent = new Intent(this, ClassInstances.class);
             startActivity(intent);
         }
+        else if ("List Class".equals(selectedItem)) {
+            Intent intent = new Intent(this, ClassList.class);
+            startActivity(intent);
+        }
+
         // Add conditions for other menu items as needed
     }
 }

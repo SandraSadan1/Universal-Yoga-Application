@@ -36,6 +36,7 @@ import com.example.uya.model.YogaClass;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -352,4 +353,6 @@ public class ClassInstances extends AppCompatActivity {
         dbHelper.close(); // Close the database
         super.onDestroy();
     }
+
 }
+

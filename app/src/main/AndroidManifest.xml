@@ -14,11 +14,17 @@
         android:theme="@style/Theme.UYA"
         tools:targetApi="31">
         <activity
-            android:name=".CourseListActivity"
-            android:exported="true" >
+            android:name=".ClassList"
+            android:exported="true">
             <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".CourseListActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
         <activity
@@ -32,10 +38,9 @@
         </activity>
         <activity
             android:name=".ClassInstances"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
             </intent-filter>
         </activity>
         <activity
