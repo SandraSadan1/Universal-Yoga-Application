@@ -56,8 +56,9 @@ public class ClassInstances extends AppCompatActivity {
     private Integer courseId;
     private TextView commentTextView;
     private EditText commentEditText;
+    private String selectedTime;
 
-    private static final String[] YOGA_CLASS_COLUMNS = {ID, COURSE_ID, TEACHER_NAME, DATE, COMMENTS};
+    private static final String[] YOGA_CLASS_COLUMNS = {ID, COURSE_ID, DAY, COURSE_TIME, TEACHER_NAME, DATE, COMMENTS};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +104,9 @@ public class ClassInstances extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 TimeSlot selectedTimeSlot = (TimeSlot) parentView.getItemAtPosition(position);
+                dateEditText.setError(null);
                 courseId = selectedTimeSlot.getId();
+                selectedTime = selectedTimeSlot.getCourseTime();
             }
 
             @Override
@@ -143,8 +146,6 @@ public class ClassInstances extends AppCompatActivity {
         dateEditText.setText(selectedDate);
         String dayOfWeek = getDayOfWeekString(currentDate);
         dayEditText.setText(dayOfWeek);
-        timeSelection.setVisibility(View.VISIBLE);
-        findViewById(R.id.timeView).setVisibility(View.VISIBLE);
         fetchTimeSlotsElseSetDefaultValue();
     }
 
@@ -203,6 +204,8 @@ public class ClassInstances extends AppCompatActivity {
     }
 
     private void hideSelectedViews() {
+        timeSelection.setVisibility(View.GONE);
+        findViewById(R.id.timeView).setVisibility(View.GONE);
         teacherTextView.setVisibility(View.GONE);
         teacherEditText.setVisibility(View.GONE);
         commentTextView.setVisibility(View.GONE);
@@ -212,6 +215,8 @@ public class ClassInstances extends AppCompatActivity {
     }
 
     private void showSelectedViews() {
+        timeSelection.setVisibility(View.VISIBLE);
+        findViewById(R.id.timeView).setVisibility(View.VISIBLE);
         teacherTextView.setVisibility(View.VISIBLE);
         teacherEditText.setVisibility(View.VISIBLE);
         commentTextView.setVisibility(View.VISIBLE);
@@ -265,11 +270,13 @@ public class ClassInstances extends AppCompatActivity {
             // Check if a teacher with the same yoga type, date and time already exists
             String date = dateEditText.getText().toString();
             if (classExists(date, courseId)) {
-                Toast.makeText(this, "A teacher is already assigned for the selected day and time", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "A teacher is already assigned for the selected date and time", Toast.LENGTH_SHORT).show();
                 dateEditText.setError("A teacher is already assigned for the same yoga class");
             } else {
                 ContentValues values = new ContentValues();
                 values.put(DATE, date);
+                values.put(DAY, dayEditText.getText().toString());
+                values.put(COURSE_TIME, timeSelection.getSelectedItem().toString());
                 values.put(TEACHER_NAME, teacherEditText.getText().toString());
                 values.put(COURSE_ID, courseId);
                 values.put(COMMENTS, commentEditText.getText().toString());
@@ -319,13 +326,15 @@ public class ClassInstances extends AppCompatActivity {
                     int id = cursor.getInt(cursor.getColumnIndexOrThrow(ID));
                     String date = cursor.getString(cursor.getColumnIndexOrThrow(DATE));
                     int courseId = cursor.getInt(cursor.getColumnIndexOrThrow(COURSE_ID));
+                    String day = cursor.getString(cursor.getColumnIndexOrThrow(DAY));
+                    String timeOfCourse = cursor.getString(cursor.getColumnIndexOrThrow(COURSE_TIME));
                     String teacher = cursor.getString(cursor.getColumnIndexOrThrow(TEACHER_NAME));
                     String comments = cursor.getString(cursor.getColumnIndexOrThrow(COMMENTS));
                     // Add the details to the list
-                    YogaClass yogaClass = new YogaClass(id, date, courseId, teacher, comments);
+                    YogaClass yogaClass = new YogaClass(id, date, courseId, day, timeOfCourse, teacher, comments);
                     yogaClasses.add(yogaClass);
                     // Display the data in the log
-                    Log.d("Data", "ID: " + id + ", Day: " + date + ", teacher" + teacher + ", courseId" + courseId);
+                    Log.d("Data", "ID: " + id + ", Day: " + day + ", teacher" + teacher + ", time" + timeOfCourse);
                 } while (cursor.moveToNext());
             }
         } catch (Exception e) {
