@@ -4,6 +4,8 @@ public class YogaClass {
     private int id;
     private String date;
     private int courseId;
+    private String day;
+    private String timeOfCourse;
     private String teacher;
     private String comments;
 
@@ -12,9 +14,11 @@ public class YogaClass {
         // Default constructor
     }
 
-    public YogaClass(int id, String date, int courseId, String teacher, String comments) {
+    public YogaClass(int id, String date, int courseId, String day, String timeOfCourse, String teacher, String comments) {
         this.id = id;
         this.date = date;
+        this.day = day;
+        this.timeOfCourse = timeOfCourse;
         this.courseId = courseId;
         this.teacher = teacher;
         this.comments = comments;
@@ -27,6 +31,12 @@ public class YogaClass {
 
     public String getDate() {
         return date;
+    }
+    public String getTimeOfCourse() {
+        return timeOfCourse;
+    }
+    public String getDay() {
+        return day;
     }
 
     public int getCourseId() {

@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 public class MyDatabaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "UniversalYogaApp";
-    public static final int DATABASE_VERSION = 18;
+    public static final int DATABASE_VERSION = 20;
     // Course details table and column names
     public static final String TABLE_NAME = "course_details";
     public static final String ID = "id";
@@ -37,6 +37,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             "CREATE TABLE " + TABLE_YOGA_CLASS + " (" +
                     ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     COURSE_ID + " INTEGER, " +
+                    DAY + " TEXT, " +
+                    COURSE_TIME + " TEXT, " +
                     DATE + " TEXT, " +
                     TEACHER_NAME + " TEXT, " +
                     COMMENTS + " TEXT" +

@@ -138,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
                             clearAllEditTextFields(); // Clear fields after successful submission
                             Toast.makeText(this, "Course added successfully", Toast.LENGTH_SHORT).show();
                             getAllYogaCourses();
+                            navigateToList();
                         } else {
                             Log.d(TAG, "Insertion failed");
                         }
@@ -208,6 +209,10 @@ public class MainActivity extends AppCompatActivity {
     }
     public void navigateToHome(View view) {
         Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
+    }
+    public void navigateToList() {
+        Intent intent = new Intent(this, CourseListActivity.class);
         startActivity(intent);
     }
 }
