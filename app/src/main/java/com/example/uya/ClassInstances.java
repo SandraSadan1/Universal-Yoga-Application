@@ -276,7 +276,7 @@ public class ClassInstances extends AppCompatActivity {
                 ContentValues values = new ContentValues();
                 values.put(DATE, date);
                 values.put(DAY, dayEditText.getText().toString());
-                values.put(COURSE_TIME, timeSelection.getSelectedItem().toString());
+                values.put(COURSE_TIME, selectedTime);
                 values.put(TEACHER_NAME, teacherEditText.getText().toString());
                 values.put(COURSE_ID, courseId);
                 values.put(COMMENTS, commentEditText.getText().toString());
