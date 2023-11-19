@@ -207,6 +207,7 @@ public class MainActivity extends AppCompatActivity {
         dbHelper.close(); // Close the database
         super.onDestroy();
     }
+
     public void navigateToHome(View view) {
         Intent intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
