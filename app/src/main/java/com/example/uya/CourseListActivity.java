@@ -122,6 +122,20 @@ public class CourseListActivity extends AppCompatActivity {
                 }
             });
 
+            // Set click listener for edit icon
+            editImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Get the ID or other relevant information from the clicked item
+                    int courseId = course.getId();
+
+                    Intent intent = new Intent(CourseListActivity.this, EditCourse.class);
+                    // Pass the relevant information to the EditCourse activity
+                    intent.putExtra("courseId", courseId);
+                    startActivity(intent);
+                }
+            });
+
             row.addView(actionLayout);
 
             tableLayout.addView(row);
