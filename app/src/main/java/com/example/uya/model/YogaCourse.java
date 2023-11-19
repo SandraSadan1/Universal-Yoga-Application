@@ -1,5 +1,7 @@
 package com.example.uya.model;
 
+import java.util.List;
+
 public class YogaCourse {
     private int id;
     private String day;
@@ -9,6 +11,7 @@ public class YogaCourse {
     private String yogaType;
     private String capacity;
     private String description;
+    private List<YogaClass> classList;
 
     // Constructors
     public YogaCourse() {
@@ -90,5 +93,8 @@ public class YogaCourse {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+    public void setClassList(List<YogaClass> classList) {
+        this.classList = classList;
     }
 }
