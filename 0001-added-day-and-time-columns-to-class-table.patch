@@ -1,0 +1,25 @@
+From e33eccbc084b820ac681bd3a500c1ac10c913b10 Mon Sep 17 00:00:00 2001
+From: SandraSadan1 <ss5282g@gre.ac.uk>
+Date: Tue, 14 Nov 2023 16:37:41 +0000
+Subject: [PATCH] added day and time columns to class table
+
+---
+ app/src/main/java/com/example/uya/ClassInstances.java | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/app/src/main/java/com/example/uya/ClassInstances.java b/app/src/main/java/com/example/uya/ClassInstances.java
+index 20404d8..d2cf04e 100644
+--- a/app/src/main/java/com/example/uya/ClassInstances.java
++++ b/app/src/main/java/com/example/uya/ClassInstances.java
+@@ -276,7 +276,7 @@ public class ClassInstances extends AppCompatActivity {
+                 ContentValues values = new ContentValues();
+                 values.put(DATE, date);
+                 values.put(DAY, dayEditText.getText().toString());
+-                values.put(COURSE_TIME, timeSelection.getSelectedItem().toString());
++                values.put(COURSE_TIME, selectedTime);
+                 values.put(TEACHER_NAME, teacherEditText.getText().toString());
+                 values.put(COURSE_ID, courseId);
+                 values.put(COMMENTS, commentEditText.getText().toString());
+-- 
+2.39.1.windows.1
+

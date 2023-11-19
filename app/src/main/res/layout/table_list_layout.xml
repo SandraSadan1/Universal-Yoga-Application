@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/parentid">
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -9,15 +10,10 @@
         android:src="@drawable/bg5" />
 
     <LinearLayout
+        android:id="@+id/layoutContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:orientation="horizontal" >
             <ImageView
                 android:id="@+id/homeButton"
                 android:layout_width="48dp"
@@ -35,7 +31,7 @@
                 android:text="Upload"
                 android:layout_marginLeft="250dp"
                 android:layout_gravity="right"/>
-        </LinearLayout>
+
         <TextView
 
             android:layout_width="wrap_content"
@@ -210,6 +206,12 @@
                 </TableLayout>
             </HorizontalScrollView>
         </ScrollView>
-
+        <TextView
+            android:id="@+id/noDataTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:gravity="center"
+            android:layout_gravity="center"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

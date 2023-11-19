@@ -1,11 +1,14 @@
 package com.example.uya;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +20,10 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 
 import com.example.uya.model.YogaClass;
 import com.example.uya.model.YogaCourse;
@@ -52,43 +58,90 @@ public class CourseListActivity extends AppCompatActivity {
         dbHelper = new MyDatabaseHelper(this);
         db = dbHelper.getWritableDatabase();
 
+        TableLayout tableLayout = findViewById(R.id.tableLayout);
+        Button uploadButton = findViewById(R.id.btnupload);
+        LinearLayout layoutContainer = findViewById(R.id.layoutContainer);
+        TextView noDataTextView = findViewById(R.id.noDataTextView);
+
         List<YogaCourse> data = fetchData();
 
-        Button uploadButton = findViewById(R.id.btnupload);
-        uploadButton.setOnClickListener(view -> uploadYogaData());
+
+        if (data.isEmpty()) {
+            // If no data, hide the entire table
+            tableLayout.setVisibility(View.GONE);
+            uploadButton.setVisibility(View.GONE);
+
+            noDataTextView = new TextView(this);
+            noDataTextView.setId(R.id.noDataTextView);
+            noDataTextView.setText("No Data Available");
+            noDataTextView.setGravity(Gravity.CENTER);
+            noDataTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
+            noDataTextView.setTextColor(ContextCompat.getColor(this, R.color.redColor)); // Adjust the color as needed
+
+            // Add "No Data Available" TextView to the parent layout
+            ConstraintLayout parent = findViewById(R.id.parentid);
+            ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            layoutParams.topToTop = ConstraintLayout.LayoutParams.PARENT_ID;
+            layoutParams.topMargin = -2000;
+
+            layoutParams.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID;
+            layoutParams.leftToLeft = ConstraintLayout.LayoutParams.PARENT_ID;
+            layoutParams.rightToRight = ConstraintLayout.LayoutParams.PARENT_ID;
+            parent.addView(noDataTextView, layoutParams);
+
+            Log.d("CourseListActivity", "No data available. Setting visibility.");
+            noDataTextView.setVisibility(View.VISIBLE);
+        }
 
 
-        TableLayout tableLayout = findViewById(R.id.tableLayout);
+        else
+        {
+            noDataTextView.setVisibility(View.GONE);
 
         for (YogaCourse course : data) {
             TableRow row = new TableRow(this);
 
             TextView dayTextView = new TextView(this);
             dayTextView.setText(course.getDay());
+            dayTextView.setGravity(Gravity.CENTER);
             row.addView(dayTextView);
 
             TextView timeTextView = new TextView(this);
             timeTextView.setText(course.getTimeOfCourse());
+            timeTextView.setGravity(Gravity.CENTER);
             row.addView(timeTextView);
 
             TextView durationTextView = new TextView(this);
             durationTextView.setText(course.getDuration());
+            durationTextView.setGravity(Gravity.CENTER);
             row.addView(durationTextView);
 
             TextView capacityTextView = new TextView(this);
             capacityTextView.setText(course.getCapacity());
+            capacityTextView.setGravity(Gravity.CENTER);
             row.addView(capacityTextView);
 
             TextView priceTextView = new TextView(this);
             priceTextView.setText(String.valueOf(course.getPrice()));
+            priceTextView.setGravity(Gravity.CENTER);
             row.addView(priceTextView);
 
             TextView yogatypeTextView = new TextView(this);
             yogatypeTextView.setText(course.getYogaType());
+            yogatypeTextView.setGravity(Gravity.CENTER);
             row.addView(yogatypeTextView);
 
             TextView descriptionTextView = new TextView(this);
             descriptionTextView.setText(course.getDescription());
+            descriptionTextView.setGravity(Gravity.CENTER);
+            if (TextUtils.isEmpty(course.getDescription())) {
+                descriptionTextView.setText("---");
+            } else {
+                descriptionTextView.setText(course.getDescription());
+            }
             row.addView(descriptionTextView);
 
             // Add more TextViews for other columns...
@@ -114,11 +167,25 @@ public class CourseListActivity extends AppCompatActivity {
             deleteImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // Perform the delete operation
-                    deleteCourse(courseId);
-                    // Optionally, you can refresh the UI or update the dataset after deletion
-                    // For example, you can remove the row from the tableLayout
-                    tableLayout.removeView(row);
+                    // Create and show an AlertDialog to confirm deletion
+                    new AlertDialog.Builder(CourseListActivity.this)
+                            .setTitle("Confirm Deletion")
+                            .setMessage("Are you sure you want to delete this course?")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // User clicked "Yes", perform the delete operation
+                                    deleteCourse(courseId);
+                                    tableLayout.removeView(row);
+                                    refreshPage();
+                                }
+                            })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // User clicked "No," do nothing, or you can add additional logic
+                                }
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
                 }
             });
 
@@ -140,6 +207,9 @@ public class CourseListActivity extends AppCompatActivity {
 
             tableLayout.addView(row);
         }
+        }
+       // Button uploadButton = findViewById(R.id.btnupload);
+        uploadButton.setOnClickListener(view -> uploadYogaData());
     }
 
     public List<YogaCourse> fetchData() {
@@ -375,7 +445,12 @@ public class CourseListActivity extends AppCompatActivity {
             Log.d("UploadYogaCourses", result);
         }
     }
-
+    private void refreshPage() {
+        // Recreate the current activity
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
+    }
     public void navigateToHome(View view) {
         Intent intent = new Intent(this, HomeActivity.class); // Replace HomeActivity with the name of your home screen activity
         startActivity(intent);

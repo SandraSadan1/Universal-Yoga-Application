@@ -1,13 +1,19 @@
 package com.example.uya;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListPopupWindow;
 import android.widget.ArrayAdapter;
 import android.view.View.OnClickListener;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class HomeActivity extends AppCompatActivity {
@@ -38,7 +44,21 @@ public class HomeActivity extends AppCompatActivity {
         String[] items = new String[]{"Add Course", "List Course", "Add Class"};
 
         ListPopupWindow popup = new ListPopupWindow(this);
-        popup.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, items));
+
+        // Create a custom adapter and set the text color programmatically
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, items) {
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                TextView textView = view.findViewById(android.R.id.text1);
+                // Set the text color as per your requirement
+                textView.setTextColor(Color.parseColor("#006400")); // Change Color.RED to the desired color
+                return view;
+            }
+        };
+
+        popup.setAdapter(adapter);
         popup.setAnchorView(menuIcon);
         popup.setHorizontalOffset(-menuIcon.getWidth());
         popup.setWidth(500);
