@@ -85,7 +85,11 @@ public class CourseListActivity extends AppCompatActivity {
                     ViewGroup.LayoutParams.WRAP_CONTENT
             );
             layoutParams.topToTop = ConstraintLayout.LayoutParams.PARENT_ID;
+<<<<<<< HEAD
             layoutParams.topMargin = -1000;
+=======
+            layoutParams.topMargin = -2000;
+>>>>>>> 89b4263b5c94e5a07e224fc5788e8ed85a51c423
 
             layoutParams.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID;
             layoutParams.leftToLeft = ConstraintLayout.LayoutParams.PARENT_ID;

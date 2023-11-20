@@ -28,6 +28,7 @@
             </intent-filter>
         </activity>
         <activity
+
             android:name=".CourseListActivity"
             android:exported="true">
             <intent-filter>
