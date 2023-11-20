@@ -1,8 +1,11 @@
 package com.example.uya;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -76,9 +79,21 @@ public class ClassList extends AppCompatActivity {
 
             // Add TextViews for each column
             TextView dateTextView = createTextView(yogaClass.getDate());
+            dateTextView.setGravity(Gravity.CENTER);
+
             TextView timeTextView = createTextView(yogaClass.getTimeOfCourse());
+            timeTextView.setGravity(Gravity.CENTER);
+
             TextView teacherTextView = createTextView(yogaClass.getTeacherName());
+            teacherTextView.setGravity(Gravity.CENTER);
+
             TextView commentsTextView = createTextView(yogaClass.getComments());
+            commentsTextView.setGravity(Gravity.CENTER);
+            if (TextUtils.isEmpty(yogaClass.getComments())) {
+                commentsTextView.setText("-------");
+            } else {
+                commentsTextView.setText(yogaClass.getComments());
+            }
 
             // Add TextViews to the TableRow
             tableRow.addView(dateTextView);
@@ -90,7 +105,10 @@ public class ClassList extends AppCompatActivity {
             tableLayout.addView(tableRow);
         }
     }
-
+    public void navigateToHome(View view) {
+        Intent intent = new Intent(this, HomeActivity.class); // Replace HomeActivity with the name of your home screen activity
+        startActivity(intent);
+    }
 
 
     private TextView createTextView(String text) {

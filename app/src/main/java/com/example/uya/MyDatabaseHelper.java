@@ -11,8 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MyDatabaseHelper extends SQLiteOpenHelper {
+
+    public static final String TAG = "MyDatabaseHelper";
     public static final String DATABASE_NAME = "UniversalYogaApp";
-    public static final int DATABASE_VERSION = 20;
+    public static final int DATABASE_VERSION = 21;
     // Course details table and column names
     public static final String TABLE_NAME = "course_details";
     public static final String ID = "id";
