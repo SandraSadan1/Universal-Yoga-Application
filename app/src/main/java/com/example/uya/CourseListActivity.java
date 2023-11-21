@@ -329,7 +329,7 @@ public class CourseListActivity extends AppCompatActivity {
         return mappedClasses;
     }
 
-    public JSONObject generateCombinedJson() {
+    public String generateCombinedJson() {
         List<YogaClass> yogaClasses = getAllYogaClasses();
         List<YogaCourse> yogaCourses = fetchData();
 
@@ -376,10 +376,6 @@ public class CourseListActivity extends AppCompatActivity {
 
                 // Add classList to the courseObject
                 courseObject.put("classList", classListArray);
-
-                // Add other fields from YogaCourse if needed
-                // courseObject.put("otherField", yogaCourse.getOtherField());
-
                 // Add the courseObject to detailListArray
                 detailListArray.put(courseObject);
             }
@@ -391,17 +387,14 @@ public class CourseListActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        return combinedJson;
+        return combinedJson.toString();
     }
 
     public void uploadYogaData() {
         try {
-            JSONObject payload = generateCombinedJson();
-            // Convert data to JSON
-            String jsonPayload = new Gson().toJson(payload);
-
+            String payload = generateCombinedJson();
             // To execute the AsyncTask
-            new UploadTask().execute(jsonPayload);
+            new UploadTask().execute(payload);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -456,6 +449,7 @@ public class CourseListActivity extends AppCompatActivity {
         finish();
         startActivity(intent);
     }
+
     public void navigateToHome(View view) {
         Intent intent = new Intent(this, HomeActivity.class); // Replace HomeActivity with the name of your home screen activity
         startActivity(intent);
