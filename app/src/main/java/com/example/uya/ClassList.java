@@ -27,7 +27,6 @@ import com.example.uya.model.YogaClass;
 
 import java.util.List;
 
-
 public class ClassList extends AppCompatActivity {
     private Spinner dayOfWeekSpinner;
     private TableLayout tableLayout;
@@ -49,6 +48,7 @@ public class ClassList extends AppCompatActivity {
         dayOfWeekSpinner.setAdapter(adapter);
 
         // Add a listener to the Spinner to detect when the selected day changes
+
         dayOfWeekSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
@@ -58,7 +58,7 @@ public class ClassList extends AppCompatActivity {
             }
 
             @Override
-            public void onNothingSeleted(AdapterView<?> parentView) {
+            public void onNothingSelected(AdapterView<?> parentView) {
                 // Do nothing here
             }
         });
