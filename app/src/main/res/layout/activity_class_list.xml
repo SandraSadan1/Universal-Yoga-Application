@@ -27,15 +27,12 @@
                 android:onClick="navigateToHome"
                 android:contentDescription="Home Button"
                 android:padding="8dp" />
-
-
-
         </LinearLayout>
         <TextView
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="List of Classes"
+            android:text="List of Yoga Classes"
             android:layout_gravity="center"
             android:textSize="24sp"
             android:padding="16dp"
@@ -102,6 +99,15 @@
                             android:text="Additional Comments"
                             android:textColor="#006400"
                             android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Action"
+                            android:padding="10dp"
+                            android:gravity="center"
+                            android:textColor="#006400"
+                            android:textStyle="bold"/>
 
                     </TableRow>
 
