@@ -3,11 +3,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="customTextColor">#359c5e</color>
-<<<<<<< HEAD
     <color name="colorAccent">#FF4081</color>
-    <color name="redColor">#FF0000</color>
-
-=======
     <color name="redColor">#FF0000</color>
 >>>>>>> 89b4263b5c94e5a07e224fc5788e8ed85a51c423
 </resources>
