@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -27,15 +28,12 @@
                 android:onClick="navigateToHome"
                 android:contentDescription="Home Button"
                 android:padding="8dp" />
-
-
-
         </LinearLayout>
         <TextView
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="List of Classes"
+            android:text="List of Yoga Classes"
             android:layout_gravity="center"
             android:textSize="24sp"
             android:padding="16dp"
@@ -66,7 +64,7 @@
                     android:padding="10dp">
 
                     <!-- Table header row -->
-                    <TableRow>
+                    <TableRow android:id="@+id/tableRow">
                         <TextView
                             android:id="@+id/date"
                             android:layout_width="wrap_content"
@@ -103,9 +101,18 @@
                             android:textColor="#006400"
                             android:textStyle="bold" />
 
-                    </TableRow>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Action"
+                            android:padding="10dp"
+                            android:gravity="center"
+                            android:textColor="#006400"
+                            android:textStyle="bold"/>
 
+                    </TableRow>
                 </TableLayout>
+
             </HorizontalScrollView>
         </ScrollView>
 

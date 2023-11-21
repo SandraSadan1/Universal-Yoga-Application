@@ -33,6 +33,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -41,6 +43,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class CourseListActivity extends AppCompatActivity {
     private MyDatabaseHelper dbHelper;
@@ -86,8 +89,17 @@ public class CourseListActivity extends AppCompatActivity {
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
             );
+<<<<<<< HEAD
             layoutParams.span = 8;
             noDataTextView.setLayoutParams(layoutParams);
+=======
+            layoutParams.topToTop = ConstraintLayout.LayoutParams.PARENT_ID;
+            layoutParams.topMargin = -1000;
+            layoutParams.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID;
+            layoutParams.leftToLeft = ConstraintLayout.LayoutParams.PARENT_ID;
+            layoutParams.rightToRight = ConstraintLayout.LayoutParams.PARENT_ID;
+            parent.addView(noDataTextView, layoutParams);
+>>>>>>> f562901046e47a00a697a45133e621baa5f950a4
 
             tableLayout.addView(noDataRow);
             Log.d("CourseListActivity", "No data available. Setting visibility.");
@@ -322,7 +334,7 @@ public class CourseListActivity extends AppCompatActivity {
         return mappedClasses;
     }
 
-    public JSONObject generateCombinedJson() {
+    public String generateCombinedJson() {
         List<YogaClass> yogaClasses = getAllYogaClasses();
         List<YogaCourse> yogaCourses = fetchData();
 
@@ -369,10 +381,6 @@ public class CourseListActivity extends AppCompatActivity {
 
                 // Add classList to the courseObject
                 courseObject.put("classList", classListArray);
-
-                // Add other fields from YogaCourse if needed
-                // courseObject.put("otherField", yogaCourse.getOtherField());
-
                 // Add the courseObject to detailListArray
                 detailListArray.put(courseObject);
             }
@@ -384,17 +392,14 @@ public class CourseListActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        return combinedJson;
+        return combinedJson.toString();
     }
 
     public void uploadYogaData() {
         try {
-            JSONObject payload = generateCombinedJson();
-            // Convert data to JSON
-            String jsonPayload = new Gson().toJson(payload);
-
+            String payload = generateCombinedJson();
             // To execute the AsyncTask
-            new UploadTask().execute(jsonPayload);
+            new UploadTask().execute(payload);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -416,9 +421,12 @@ public class CourseListActivity extends AppCompatActivity {
 
         int responseCode = connection.getResponseCode();
         if (responseCode == HttpURLConnection.HTTP_OK) {
-            return "Upload successful";
+            // Read the response from the server
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
+                return "Upload successful. Server response: " + br.lines().collect(Collectors.joining(System.lineSeparator()));
+            }
         } else {
-            return "Upload failed: ";
+            return "Upload failed. Server response code: " + responseCode;
         }
     }
 
@@ -440,6 +448,16 @@ public class CourseListActivity extends AppCompatActivity {
             Log.d("UploadYogaCourses", result);
         }
     }
+<<<<<<< HEAD
+=======
+    private void refreshPage() {
+        // Recreate the current activity
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
+    }
+
+>>>>>>> f562901046e47a00a697a45133e621baa5f950a4
     public void navigateToHome(View view) {
         Intent intent = new Intent(this, HomeActivity.class); // Replace HomeActivity with the name of your home screen activity
         startActivity(intent);
