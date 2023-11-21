@@ -21,14 +21,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ClassList"
+            android:name=".ClassListActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
         <activity
-
             android:name=".CourseListActivity"
             android:exported="true">
             <intent-filter>

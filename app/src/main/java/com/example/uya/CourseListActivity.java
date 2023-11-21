@@ -52,6 +52,8 @@ public class CourseListActivity extends AppCompatActivity {
             MyDatabaseHelper.DAY, MyDatabaseHelper.COURSE_TIME, MyDatabaseHelper.TEACHER_NAME,
             MyDatabaseHelper.DATE, MyDatabaseHelper.COMMENTS};
     private static final String WEB_SERVICE_URL = "https://stuiis.cms.gre.ac.uk/COMP1424CoreWS/comp1424cw";
+    private Button uploadButton;
+    //Button uploadButton = findViewById(R.id.btnupload);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,157 +63,149 @@ public class CourseListActivity extends AppCompatActivity {
         dbHelper = new MyDatabaseHelper(this);
         db = dbHelper.getWritableDatabase();
 
-        TableLayout tableLayout = findViewById(R.id.tableLayout);
-        Button uploadButton = findViewById(R.id.btnupload);
-        LinearLayout layoutContainer = findViewById(R.id.layoutContainer);
-        TextView noDataTextView = findViewById(R.id.noDataTextView);
+        uploadButton = findViewById(R.id.btnupload);
 
+        populateTable();
+        uploadButton.setOnClickListener(view -> uploadYogaData());
+    }
+
+    private void populateTable() {
         List<YogaCourse> data = fetchData();
-
+        TableLayout tableLayout = findViewById(R.id.tableLayout);
 
         if (data.isEmpty()) {
-            // If no data, hide the entire table
-            tableLayout.setVisibility(View.GONE);
             uploadButton.setVisibility(View.GONE);
-
-            noDataTextView = new TextView(this);
-            noDataTextView.setId(R.id.noDataTextView);
+            TableRow noDataRow =new TableRow(this);
+            TextView noDataTextView = new TextView(this);
             noDataTextView.setText("No Data Available");
             noDataTextView.setGravity(Gravity.CENTER);
             noDataTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
             noDataTextView.setTextColor(ContextCompat.getColor(this, R.color.redColor)); // Adjust the color as needed
 
+            noDataRow.addView(noDataTextView);
             // Add "No Data Available" TextView to the parent layout
-            ConstraintLayout parent = findViewById(R.id.parentid);
-            ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(
+
+            TableRow.LayoutParams layoutParams = new TableRow.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
             );
-            layoutParams.topToTop = ConstraintLayout.LayoutParams.PARENT_ID;
-            layoutParams.topMargin = -1000;
-            layoutParams.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID;
-            layoutParams.leftToLeft = ConstraintLayout.LayoutParams.PARENT_ID;
-            layoutParams.rightToRight = ConstraintLayout.LayoutParams.PARENT_ID;
-            parent.addView(noDataTextView, layoutParams);
 
+            layoutParams.span = 8;
+            noDataTextView.setLayoutParams(layoutParams);
+
+
+
+
+            tableLayout.addView(noDataRow);
             Log.d("CourseListActivity", "No data available. Setting visibility.");
-            noDataTextView.setVisibility(View.VISIBLE);
         }
+        else {
+            for (YogaCourse course : data) {
+                TableRow row = new TableRow(this);
 
+                TextView dayTextView = new TextView(this);
+                dayTextView.setText(course.getDay());
+                dayTextView.setGravity(Gravity.CENTER);
+                row.addView(dayTextView);
 
-        else
-        {
-            noDataTextView.setVisibility(View.GONE);
+                TextView timeTextView = new TextView(this);
+                timeTextView.setText(course.getTimeOfCourse());
+                timeTextView.setGravity(Gravity.CENTER);
+                row.addView(timeTextView);
 
-        for (YogaCourse course : data) {
-            TableRow row = new TableRow(this);
+                TextView durationTextView = new TextView(this);
+                durationTextView.setText(course.getDuration());
+                durationTextView.setGravity(Gravity.CENTER);
+                row.addView(durationTextView);
 
-            TextView dayTextView = new TextView(this);
-            dayTextView.setText(course.getDay());
-            dayTextView.setGravity(Gravity.CENTER);
-            row.addView(dayTextView);
+                TextView capacityTextView = new TextView(this);
+                capacityTextView.setText(course.getCapacity());
+                capacityTextView.setGravity(Gravity.CENTER);
+                row.addView(capacityTextView);
 
-            TextView timeTextView = new TextView(this);
-            timeTextView.setText(course.getTimeOfCourse());
-            timeTextView.setGravity(Gravity.CENTER);
-            row.addView(timeTextView);
+                TextView priceTextView = new TextView(this);
+                priceTextView.setText(String.valueOf(course.getPrice()));
+                priceTextView.setGravity(Gravity.CENTER);
+                row.addView(priceTextView);
 
-            TextView durationTextView = new TextView(this);
-            durationTextView.setText(course.getDuration());
-            durationTextView.setGravity(Gravity.CENTER);
-            row.addView(durationTextView);
+                TextView yogatypeTextView = new TextView(this);
+                yogatypeTextView.setText(course.getYogaType());
+                yogatypeTextView.setGravity(Gravity.CENTER);
+                row.addView(yogatypeTextView);
 
-            TextView capacityTextView = new TextView(this);
-            capacityTextView.setText(course.getCapacity());
-            capacityTextView.setGravity(Gravity.CENTER);
-            row.addView(capacityTextView);
-
-            TextView priceTextView = new TextView(this);
-            priceTextView.setText(String.valueOf(course.getPrice()));
-            priceTextView.setGravity(Gravity.CENTER);
-            row.addView(priceTextView);
-
-            TextView yogatypeTextView = new TextView(this);
-            yogatypeTextView.setText(course.getYogaType());
-            yogatypeTextView.setGravity(Gravity.CENTER);
-            row.addView(yogatypeTextView);
-
-            TextView descriptionTextView = new TextView(this);
-            descriptionTextView.setText(course.getDescription());
-            descriptionTextView.setGravity(Gravity.CENTER);
-            if (TextUtils.isEmpty(course.getDescription())) {
-                descriptionTextView.setText("---");
-            } else {
+                TextView descriptionTextView = new TextView(this);
                 descriptionTextView.setText(course.getDescription());
+                descriptionTextView.setGravity(Gravity.CENTER);
+                if (TextUtils.isEmpty(course.getDescription())) {
+                    descriptionTextView.setText("---");
+                } else {
+                    descriptionTextView.setText(course.getDescription());
+                }
+                row.addView(descriptionTextView);
+
+                // Add more TextViews for other columns...
+
+                LinearLayout actionLayout = new LinearLayout(this);
+                actionLayout.setOrientation(LinearLayout.HORIZONTAL);
+                actionLayout.setGravity(Gravity.CENTER);
+
+                ImageView editImageView = new ImageView(this);
+                editImageView.setImageResource(R.drawable.edit);
+                editImageView.setLayoutParams(new ViewGroup.LayoutParams(60, 60));
+                actionLayout.addView(editImageView);
+
+                ImageView deleteImageView = new ImageView(this);
+                deleteImageView.setImageResource(R.drawable.delete);
+                deleteImageView.setLayoutParams(new ViewGroup.LayoutParams(52, 52));
+                actionLayout.addView(deleteImageView);
+
+                // Get the course ID
+                final int courseId = course.getId();
+
+                // Set click listener for delete icon
+                deleteImageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // Create and show an AlertDialog to confirm deletion
+                        new AlertDialog.Builder(CourseListActivity.this)
+                                .setTitle("Confirm Deletion")
+                                .setMessage("Are you sure you want to delete this course and it's associated classes?")
+                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // User clicked "Yes", perform the delete operation
+                                        deleteCourse(courseId);
+                                        tableLayout.removeView(row);
+                                    }
+                                })
+                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // User clicked "No," do nothing, or you can add additional logic
+                                    }
+                                })
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    }
+                });
+
+                // Set click listener for edit icon
+                editImageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // Get the ID or other relevant information from the clicked item
+                        int courseId = course.getId();
+
+                        Intent intent = new Intent(CourseListActivity.this, EditCourse.class);
+                        // Pass the relevant information to the EditCourse activity
+                        intent.putExtra("courseId", courseId);
+                        startActivity(intent);
+                    }
+                });
+
+                row.addView(actionLayout);
+
+                tableLayout.addView(row);
             }
-            row.addView(descriptionTextView);
-
-            // Add more TextViews for other columns...
-
-            LinearLayout actionLayout = new LinearLayout(this);
-            actionLayout.setOrientation(LinearLayout.HORIZONTAL);
-            actionLayout.setGravity(Gravity.CENTER);
-
-            ImageView editImageView = new ImageView(this);
-            editImageView.setImageResource(R.drawable.edit);
-            editImageView.setLayoutParams(new ViewGroup.LayoutParams(60, 60));
-            actionLayout.addView(editImageView);
-
-            ImageView deleteImageView = new ImageView(this);
-            deleteImageView.setImageResource(R.drawable.delete);
-            deleteImageView.setLayoutParams(new ViewGroup.LayoutParams(52, 52));
-            actionLayout.addView(deleteImageView);
-
-            // Get the course ID
-            final int courseId = course.getId();
-
-            // Set click listener for delete icon
-            deleteImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Create and show an AlertDialog to confirm deletion
-                    new AlertDialog.Builder(CourseListActivity.this)
-                            .setTitle("Confirm Deletion")
-                            .setMessage("Are you sure you want to delete this course?")
-                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // User clicked "Yes", perform the delete operation
-                                    deleteCourse(courseId);
-                                    tableLayout.removeView(row);
-                                    refreshPage();
-                                }
-                            })
-                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // User clicked "No," do nothing, or you can add additional logic
-                                }
-                            })
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .show();
-                }
-            });
-
-            // Set click listener for edit icon
-            editImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Get the ID or other relevant information from the clicked item
-                    int courseId = course.getId();
-
-                    Intent intent = new Intent(CourseListActivity.this, EditCourse.class);
-                    // Pass the relevant information to the EditCourse activity
-                    intent.putExtra("courseId", courseId);
-                    startActivity(intent);
-                }
-            });
-
-            row.addView(actionLayout);
-
-            tableLayout.addView(row);
         }
-        }
-       // Button uploadButton = findViewById(R.id.btnupload);
-        uploadButton.setOnClickListener(view -> uploadYogaData());
     }
 
     public List<YogaCourse> fetchData() {
@@ -250,15 +244,21 @@ public class CourseListActivity extends AppCompatActivity {
     public void deleteCourse(int courseId) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         try {
-            // Execute the DELETE statement
-            db.delete("course_details", MyDatabaseHelper.ID + "=?", new String[]{String.valueOf(courseId)});
-            showToast("Course deleted successfully");
+            // Delete associated classes first
+            db.delete(MyDatabaseHelper.TABLE_YOGA_CLASS, MyDatabaseHelper.COURSE_ID + "=?", new String[]{String.valueOf(courseId)});
+
+            // Then, delete the course
+            db.delete(MyDatabaseHelper.TABLE_NAME, MyDatabaseHelper.ID + "=?", new String[]{String.valueOf(courseId)});
+            populateTable();
+
+            showToast("Course and associated classes deleted successfully");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             db.close();
         }
     }
+
 
     private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
@@ -443,6 +443,7 @@ public class CourseListActivity extends AppCompatActivity {
             Log.d("UploadYogaCourses", result);
         }
     }
+
     private void refreshPage() {
         // Recreate the current activity
         Intent intent = getIntent();

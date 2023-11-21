@@ -84,19 +84,18 @@ public class HomeActivity extends AppCompatActivity {
         if ("Add Course".equals(selectedItem)) {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
-        }
-        else if ("List Course".equals(selectedItem)) {
+        } else if ("List Course".equals(selectedItem)) {
             Intent intent = new Intent(this, CourseListActivity.class);
             startActivity(intent);
         } else if ("Add Class".equals(selectedItem)) {
             Intent intent = new Intent(this, ClassInstances.class);
             startActivity(intent);
-        }
-        else if ("List Class".equals(selectedItem)) {
-            Intent intent = new Intent(this, ClassList.class);
+        } else if ("List Class".equals(selectedItem)) {
+            Intent intent = new Intent(this, ClassListActivity.class);
+
             startActivity(intent);
         }
-
+    }
         // Add conditions for other menu items as needed
     }
-}
+
