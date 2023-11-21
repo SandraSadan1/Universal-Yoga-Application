@@ -89,17 +89,12 @@ public class CourseListActivity extends AppCompatActivity {
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
             );
-<<<<<<< HEAD
+
             layoutParams.span = 8;
             noDataTextView.setLayoutParams(layoutParams);
-=======
-            layoutParams.topToTop = ConstraintLayout.LayoutParams.PARENT_ID;
-            layoutParams.topMargin = -1000;
-            layoutParams.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID;
-            layoutParams.leftToLeft = ConstraintLayout.LayoutParams.PARENT_ID;
-            layoutParams.rightToRight = ConstraintLayout.LayoutParams.PARENT_ID;
-            parent.addView(noDataTextView, layoutParams);
->>>>>>> f562901046e47a00a697a45133e621baa5f950a4
+
+
+
 
             tableLayout.addView(noDataRow);
             Log.d("CourseListActivity", "No data available. Setting visibility.");
@@ -448,8 +443,7 @@ public class CourseListActivity extends AppCompatActivity {
             Log.d("UploadYogaCourses", result);
         }
     }
-<<<<<<< HEAD
-=======
+
     private void refreshPage() {
         // Recreate the current activity
         Intent intent = getIntent();
@@ -457,7 +451,6 @@ public class CourseListActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
->>>>>>> f562901046e47a00a697a45133e621baa5f950a4
     public void navigateToHome(View view) {
         Intent intent = new Intent(this, HomeActivity.class); // Replace HomeActivity with the name of your home screen activity
         startActivity(intent);
