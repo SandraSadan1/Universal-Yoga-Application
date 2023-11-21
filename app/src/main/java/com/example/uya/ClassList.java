@@ -1,4 +1,5 @@
 package com.example.uya;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -25,11 +26,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.uya.model.YogaClass;
 
 import java.util.List;
+
 public class ClassList extends AppCompatActivity {
     private Spinner dayOfWeekSpinner;
     private TableLayout tableLayout;
     private MyDatabaseHelper databaseHelper;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
