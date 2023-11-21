@@ -27,6 +27,7 @@ import com.example.uya.model.YogaClass;
 
 import java.util.List;
 
+
 public class ClassList extends AppCompatActivity {
     private Spinner dayOfWeekSpinner;
     private TableLayout tableLayout;
@@ -57,7 +58,7 @@ public class ClassList extends AppCompatActivity {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
+            public void onNothingSeleted(AdapterView<?> parentView) {
                 // Do nothing here
             }
         });
@@ -162,12 +163,10 @@ public class ClassList extends AppCompatActivity {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-
     public void navigateToHome(View view) {
         Intent intent = new Intent(this, HomeActivity.class); // Replace HomeActivity with the name of your home screen activity
         startActivity(intent);
     }
-
 
     private TextView createTextView(String text) {
         // Helper method to create a TextView with common properties
