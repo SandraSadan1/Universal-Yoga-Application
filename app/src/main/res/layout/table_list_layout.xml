@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/parentid">
+    android:layout_height="match_parent">
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -29,14 +28,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Upload"
-                android:layout_marginLeft="250dp"
                 android:layout_gravity="right"/>
 
         <TextView
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="List of Courses"
+            android:text="List of Yoga Courses"
             android:layout_gravity="center"
             android:textSize="24sp"
             android:padding="16dp"
@@ -120,98 +118,11 @@
                             android:text="Action"
                             android:padding="10dp"
                             android:gravity="center"
-                            android:layout_span="2"
                             android:textColor="#006400"
                             android:textStyle="bold"/>
                     </TableRow>
-
-                    <!-- Table data row -->
-                    <TableRow>
-                        <!-- Adjust the layout_width for each TextView to set fixed widths for each column -->
-
-                        <TextView
-                            android:layout_width="100dp"
-                            android:layout_height="wrap_content"
-                            android:padding="10dp"
-                            android:layout_gravity="right"/>
-
-                        <TextView
-                            android:layout_width="40dp"
-                            android:layout_height="wrap_content"
-                            android:padding="10dp"
-                            android:layout_gravity="right" />
-
-                        <TextView
-                            android:layout_width="40dp"
-                            android:layout_height="wrap_content"
-                            android:padding="10dp"
-                            android:layout_gravity="center" />
-
-
-                        <!-- Add similar TextViews for other columns with appropriate widths -->
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="10dp"
-                            android:layout_gravity="right"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="10dp"
-                            android:layout_gravity="right"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="10dp"
-                            android:layout_gravity="right"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="10dp"
-                            android:layout_gravity="right"/>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_gravity="right">
-
-                            <ImageView
-                                android:id="@+id/edit"
-                                android:layout_width="34dp"
-                                android:layout_height="34dp"
-                                android:layout_marginTop="2dp"
-                                android:contentDescription="edit"
-                                android:padding="10dp"
-                                android:gravity="center" />
-
-                            <ImageView
-                                android:id="@+id/del"
-                                android:layout_width="32dp"
-                                android:layout_height="32dp"
-                                android:layout_marginTop="2dp"
-                                android:contentDescription="Delete"
-                                android:padding="10dp"
-                                android:gravity="center"
-                                />
-                        </LinearLayout>
-                    </TableRow>
-
-                    <!-- Add more rows for additional items -->
-
                 </TableLayout>
             </HorizontalScrollView>
         </ScrollView>
-        <TextView
-            android:id="@+id/noDataTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:gravity="center"
-            android:layout_gravity="center"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
