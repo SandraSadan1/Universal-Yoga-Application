@@ -213,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
     public void navigateToList() {
-        Intent intent = new Intent(this, CourseListActivity.class);
+        Intent intent = new Intent(this, CourseDetailsActivity.class);
         startActivity(intent);
     }
 }

@@ -3,6 +3,18 @@ package com.example.uya.model;
 import java.util.List;
 
 public class YogaCourse {
+
+    private boolean isClicked;
+
+    // Constructor and other methods
+
+    public boolean isClicked() {
+        return isClicked;
+    }
+
+    public void setClicked(boolean clicked) {
+        isClicked = clicked;
+    }
     private int id;
     private String day;
     private String duration;
