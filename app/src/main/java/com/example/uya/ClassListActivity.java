@@ -3,28 +3,23 @@ package com.example.uya;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.uya.model.YogaClass;
 
@@ -33,8 +28,9 @@ import java.util.List;
 public class ClassListActivity extends AppCompatActivity {
 
     private Spinner dayOfWeekSpinner;
-    private TableLayout tableLayout;
+    private RecyclerView recyclerView;
     private MyDatabaseHelper databaseHelper;
+    private ClassListAdapter classListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +39,21 @@ public class ClassListActivity extends AppCompatActivity {
 
         databaseHelper = new MyDatabaseHelper(this);
         dayOfWeekSpinner = findViewById(R.id.dayOfWeek);
-        tableLayout = findViewById(R.id.tableLayout);
+        recyclerView = findViewById(R.id.recyclerView);
+
+
+        // Find the ImageView and set its OnClickListener
+        ImageView imageViewHome = findViewById(R.id.homeButton);
+        imageViewHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateHome(v);
+            }
+        });
+        // Configure the RecyclerView
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        classListAdapter = new ClassListAdapter();
+        recyclerView.setAdapter(classListAdapter);
 
         // Populate the Spinner with the list of days
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
@@ -57,7 +67,7 @@ public class ClassListActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 // Handle the selection change
                 String selectedDay = dayOfWeekSpinner.getSelectedItem().toString();
-                populateTable(selectedDay); // Query and populate the table based on the selected day
+                populateList(selectedDay); // Query and populate the list based on the selected day
             }
 
             @Override
@@ -67,135 +77,120 @@ public class ClassListActivity extends AppCompatActivity {
         });
     }
 
-    private void populateTable(String selectedDay) {
+    private void populateList(String selectedDay) {
         // Query the database for data from TABLE_YOGA_CLASS based on the selected day
         List<YogaClass> yogaClasses = databaseHelper.queryClassesForDay(selectedDay);
 
         // Log the selected day
         Log.d("ClassList", "Selected Day: " + selectedDay);
 
-        // Get a reference to the existing TableLayout
-        TableLayout tableLayout = findViewById(R.id.tableLayout);
-        // Clear existing data rows in the table
-        tableLayout.removeViews(1, tableLayout.getChildCount() - 1);
+            classListAdapter.setData(yogaClasses);
+            classListAdapter.notifyDataSetChanged();
 
-        if (yogaClasses.isEmpty()) {
-            // If there is no data, add a message to the TableLayout
-            TableRow noDataRow = new TableRow(this);
 
-            TextView noDataTextView = new TextView(this);
-            noDataTextView.setText("No data available");
-            noDataTextView.setGravity(Gravity.CENTER);
-            noDataTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
-            noDataTextView.setTextColor(ContextCompat.getColor(this, R.color.redColor)); // Adjust the color as needed
-
-            // Add the TextView to the TableRow
-            noDataRow.addView(noDataTextView);
-
-            // Set layout parameters to make the text span across all columns
-            TableRow.LayoutParams layoutParams = new TableRow.LayoutParams(
-                    TableRow.LayoutParams.MATCH_PARENT,
-                    TableRow.LayoutParams.WRAP_CONTENT);
-            layoutParams.span = 5; // Set the number of columns the text should span
-            noDataTextView.setLayoutParams(layoutParams);
-
-            // Add the TableRow to the existing TableLayout
-            tableLayout.addView(noDataRow);
-        } else {
-            // Dynamically populate the TableLayout with data from the database
-            for (YogaClass yogaClass : yogaClasses) {
-                TableRow tableRow = new TableRow(this);
-
-                // Add TextViews for each column
-                TextView dateTextView = createTextView(yogaClass.getDate());
-                dateTextView.setGravity(Gravity.CENTER);
-
-                TextView timeTextView = createTextView(yogaClass.getTimeOfCourse());
-                timeTextView.setGravity(Gravity.CENTER);
-
-                TextView teacherTextView = createTextView(yogaClass.getTeacherName());
-                teacherTextView.setGravity(Gravity.CENTER);
-
-                TextView commentsTextView = createTextView(yogaClass.getComments());
-                commentsTextView.setGravity(Gravity.CENTER);
-                if (TextUtils.isEmpty(yogaClass.getComments())) {
-                    commentsTextView.setText("-------");
-                } else {
-                    commentsTextView.setText(yogaClass.getComments());
-                }
-
-                LinearLayout actionLayout = new LinearLayout(this);
-                actionLayout.setOrientation(LinearLayout.HORIZONTAL);
-                actionLayout.setGravity(Gravity.CENTER);
-
-                ImageView deleteImageView = new ImageView(this);
-                deleteImageView.setImageResource(R.drawable.delete);
-                deleteImageView.setLayoutParams(new ViewGroup.LayoutParams(52, 52));
-                actionLayout.addView(deleteImageView);
-                // Get the course ID
-                final int classId = yogaClass.getId();
-                // Set click listener for delete icon
-                deleteImageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // Create and show an AlertDialog to confirm deletion
-                        new AlertDialog.Builder(ClassListActivity.this)
-                                .setTitle("Confirm Deletion")
-                                .setMessage("Are you sure you want to delete this course?")
-                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        SQLiteDatabase db = databaseHelper.getWritableDatabase();
-                                        try {
-                                            // Execute the DELETE statement
-                                            db.delete("yoga_class", MyDatabaseHelper.ID + "=?", new String[]{String.valueOf(classId)});
-                                            showToast("Class deleted successfully");
-                                            // After deletion, refresh the table
-                                            populateTable(dayOfWeekSpinner.getSelectedItem().toString());
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        } finally {
-                                            db.close();
-                                        }
-                                    }
-                                })
-                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        // User clicked "No," do nothing, or you can add additional logic
-                                    }
-                                })
-                                .setIcon(android.R.drawable.ic_dialog_alert)
-                                .show();
-                    }
-                });
-
-                // Add TextViews to the TableRow
-                tableRow.addView(dateTextView);
-                tableRow.addView(timeTextView);
-                tableRow.addView(teacherTextView);
-                tableRow.addView(commentsTextView);
-                tableRow.addView(actionLayout);
-
-                // Add the TableRow to the existing TableLayout
-                tableLayout.addView(tableRow);
-            }
-        }
     }
 
     private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    public void navigateToHome(View view) {
-        Intent intent = new Intent(this, HomeActivity.class); // Replace HomeActivity with the name of your home screen activity
-        startActivity(intent);
+    private void showDeleteConfirmation(int classId) {
+        new AlertDialog.Builder(ClassListActivity.this)
+                .setTitle("Confirm Deletion")
+                .setMessage("Are you sure you want to delete this Class?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    SQLiteDatabase db = databaseHelper.getWritableDatabase();
+                    try {
+                        // Execute the DELETE statement
+                        db.delete("yoga_class", MyDatabaseHelper.ID + "=?", new String[]{String.valueOf(classId)});
+                        showToast("Class deleted successfully");
+                        // After deletion, refresh the list
+                        populateList(dayOfWeekSpinner.getSelectedItem().toString());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    } finally {
+                        db.close();
+                    }
+                })
+                .setNegativeButton("No", (dialog, which) -> {
+                    // User clicked "No," do nothing, or you can add additional logic
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
+    // RecyclerView Adapter for the YogaClass items
+    private class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.ViewHolder> {
 
-    private TextView createTextView(String text) {
-        // Helper method to create a TextView with common properties
-        TextView textView = new TextView(this);
-        textView.setText(text);
-        textView.setPadding(10, 10, 10, 10);
-        return textView;
+        private List<YogaClass> data;
+
+        public void setData(List<YogaClass> data) {
+            this.data = data;
+        }
+
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = getLayoutInflater().inflate(R.layout.activity_class_item, parent, false);
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            if (data == null || data.isEmpty()) {
+                return; // Do nothing if the data is null or empty
+            }
+
+            YogaClass yogaClass = data.get(position);
+
+            // Set data to views in the CardView layout
+            if (holder.dateTextView != null) {
+                holder.dateTextView.setText("Date:" +yogaClass.getDate());
+            }
+            if (holder.timeTextView != null) {
+                holder.timeTextView.setText("Time:"+yogaClass.getTimeOfCourse());
+            }
+            if (holder.teacherTextView != null) {
+                holder.teacherTextView.setText("Teacher:"+yogaClass.getTeacherName());
+            }
+            if (holder.commentsTextView != null) {
+                holder.commentsTextView.setText(TextUtils.isEmpty(yogaClass.getComments()) ? "Additional Comments:----" : "Additional Comments:"+ yogaClass.getComments());
+            }
+
+            // Set click listener for delete icon
+            if (holder.deleteImageView != null) {
+                holder.deleteImageView.setOnClickListener(v -> showDeleteConfirmation(yogaClass.getId()));
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return data == null ? 0 : data.size();
+        }
+
+        // ViewHolder class for the RecyclerView
+        public class ViewHolder extends RecyclerView.ViewHolder {
+
+            public TextView dateTextView;
+            public TextView timeTextView;
+            public TextView teacherTextView;
+            public TextView commentsTextView;
+            public ImageView deleteImageView;
+
+            public ViewHolder(View itemView) {
+                super(itemView);
+
+                dateTextView = itemView.findViewById(R.id.textViewDateItem);
+                timeTextView = itemView.findViewById(R.id.textViewTimeItem);
+                teacherTextView = itemView.findViewById(R.id.textViewTeacherItem);
+                commentsTextView = itemView.findViewById(R.id.textViewAdditionalCommentItem);
+                deleteImageView = itemView.findViewById(R.id.imageViewDelete);
+            }
+        }
+    }
+    public void navigateHome(View view) {
+        Intent intent = new Intent(this, HomeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
 }

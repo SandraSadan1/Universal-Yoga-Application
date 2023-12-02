@@ -85,7 +85,7 @@ public class HomeActivity extends AppCompatActivity {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         } else if ("List Course".equals(selectedItem)) {
-            Intent intent = new Intent(this, CourseListActivity.class);
+            Intent intent = new Intent(this, CourseDetailsActivity.class);
             startActivity(intent);
         } else if ("Add Class".equals(selectedItem)) {
             Intent intent = new Intent(this, ClassInstances.class);
