@@ -1,10 +1,11 @@
 package com.example.uya;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,17 +17,35 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.uya.model.YogaClass;
 import com.example.uya.model.YogaCourse;
+import com.google.gson.Gson;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 public class CourseDetailsActivity extends AppCompatActivity {
 
@@ -34,10 +53,15 @@ public class CourseDetailsActivity extends AppCompatActivity {
     private CourseDetailsAdapter adapter;
     private List<YogaCourse> yogaCourses;
     private MyDatabaseHelper dbHelper;
+    private SQLiteDatabase db;
 
     // Views for the CardView
     private CardView cardViewItem;
     private TextView textViewDay, texttime, textduration, textprice, textcapacity, texttype, textdescription;
+    private Button uploadButton;
+    private static final String[] YOGA_CLASS_COLUMNS = {MyDatabaseHelper.ID, MyDatabaseHelper.COURSE_ID,
+            MyDatabaseHelper.DAY, MyDatabaseHelper.COURSE_TIME, MyDatabaseHelper.TEACHER_NAME,
+            MyDatabaseHelper.DATE, MyDatabaseHelper.COMMENTS};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +72,7 @@ public class CourseDetailsActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
 
         dbHelper = new MyDatabaseHelper(this);
+        db = dbHelper.getWritableDatabase();
 
         // Views for the CardView
         cardViewItem = findViewById(R.id.cardViewItem);
@@ -81,7 +106,8 @@ public class CourseDetailsActivity extends AppCompatActivity {
             }
         });
 
-
+        uploadButton = findViewById(R.id.btnupload);
+        uploadButton.setOnClickListener(view -> uploadYogaData());
     }
 
     private void showCourseDetails(YogaCourse yogaCourse) {
@@ -138,7 +164,6 @@ public class CourseDetailsActivity extends AppCompatActivity {
         }
 
         cursor.close();
-        db.close();
 
         return yogaCourses;
     }
@@ -271,5 +296,220 @@ public class CourseDetailsActivity extends AppCompatActivity {
         finish();
     }
 
+//    Functions for upload course
+
+    public void uploadYogaData() {
+        try {
+            Map<String, Object> payload = generateCombinedJson();
+            Gson gson = new Gson();
+            String jsonpayload = "jsonpayload=" + URLEncoder.encode(gson.toJson(payload), "UTF-8");
+
+            // To execute the AsyncTask
+            new CourseDetailsActivity.UploadTask().execute(jsonpayload);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("UploadYogaCourses", "Error uploading yoga courses", e);
+        }
+    }
+
+    public Map<String, Object> generateCombinedJson() {
+        List<YogaClass> yogaClasses = getAllYogaClasses();
+        List<YogaCourse> yogaCourses = getCourseDetails();
+
+        Map<Integer, List<YogaClass>> groupedClasses = mapYogaClassesToCourses(yogaClasses, yogaCourses);
+
+        // Create a JSON object to represent the combined data
+        Map<String, Object> combinedJson = new HashMap<>();
+
+        try {
+            // Add userId field
+            combinedJson.put("userId", "mm5290q");
+
+            // Create an array to store detailList
+            List<Map<String, Object>> detailListArray = new ArrayList<>();
+
+            // Iterate through each yoga course and add its details to detailList
+            for (YogaCourse yogaCourse : yogaCourses) {
+                Map<String, Object> courseObject = new HashMap<>();
+
+                courseObject.put("dayOfWeek", yogaCourse.getDay());
+                courseObject.put("timeOfDay", yogaCourse.getTimeOfCourse());
+                courseObject.put("capacity", yogaCourse.getCapacity());
+                courseObject.put("duration", yogaCourse.getDuration());
+                courseObject.put("typeOfYoga", yogaCourse.getYogaType());
+                courseObject.put("description", yogaCourse.getDescription());
+
+                // Create an array to store classList
+                List<Map<String, Object>> classListArray = new ArrayList<>();
+
+                // Check if there are classes for the current course
+                if (groupedClasses.containsKey(yogaCourse.getId())) {
+                    List<YogaClass> classes = groupedClasses.get(yogaCourse.getId());
+
+                    // Iterate through each class and add its details to classList
+                    for (YogaClass yogaClass : classes) {
+                        Map<String, Object> classObject = new HashMap<>();
+                        classObject.put("date", yogaClass.getDate());
+                        classObject.put("teacher", yogaClass.getTeacherName());
+                        classObject.put("comments", yogaClass.getComments());
+                        // Add other fields if needed
+                        classListArray.add(classObject);
+                    }
+                }
+
+                // Add classList to the courseObject
+                courseObject.put("classList", classListArray);
+                // Add the courseObject to detailListArray
+                detailListArray.add(courseObject);
+            }
+
+            // Add detailList to the combinedJson
+            combinedJson.put("detailList", detailListArray);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return combinedJson;
+    }
+
+    private String sendPostRequest(String jsonpayload) throws Exception {
+        URL url = new URL(getString(R.string.url));
+        trustAllHosts();
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        connection.setDoOutput(true);
+
+        try (OutputStream os = connection.getOutputStream()) {
+            byte[] input = jsonpayload.getBytes(StandardCharsets.UTF_8);
+            os.write(input, 0, input.length);
+        }
+
+        int responseCode = connection.getResponseCode();
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+            // Read the response from the server
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
+                Looper.prepare();
+                Toast.makeText(this, "Course added successfully", Toast.LENGTH_SHORT).show();
+                Looper.loop();
+                return "Upload successful. Server response: " + br.lines().collect(Collectors.joining(System.lineSeparator()));
+            }
+        } else {
+            return "Upload failed. Server response code: " + responseCode;
+        }
+    }
+
+    public List<YogaClass> getAllYogaClasses() {
+        List<YogaClass> yogaClasses = new ArrayList<>();
+        Cursor cursor = db.query("yoga_class", YOGA_CLASS_COLUMNS, null, null, null, null, null);
+
+        try {
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    int id = cursor.getInt(cursor.getColumnIndexOrThrow(MyDatabaseHelper.ID));
+                    String date = cursor.getString(cursor.getColumnIndexOrThrow(MyDatabaseHelper.DATE));
+                    int courseId = cursor.getInt(cursor.getColumnIndexOrThrow(MyDatabaseHelper.COURSE_ID));
+                    String day = cursor.getString(cursor.getColumnIndexOrThrow(MyDatabaseHelper.DAY));
+                    String timeOfCourse = cursor.getString(cursor.getColumnIndexOrThrow(MyDatabaseHelper.COURSE_TIME));
+                    String teacher = cursor.getString(cursor.getColumnIndexOrThrow(MyDatabaseHelper.TEACHER_NAME));
+                    String comments = cursor.getString(cursor.getColumnIndexOrThrow(MyDatabaseHelper.COMMENTS));
+                    // Add the details to the list
+                    YogaClass yogaClass = new YogaClass(id, date, courseId, day, timeOfCourse, teacher, comments);
+                    yogaClasses.add(yogaClass);
+                    // Display the data in the log
+                    Log.d("Data", "ID: " + id + ", Day: " + day + ", teacher" + teacher + ", time" + timeOfCourse);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return yogaClasses;
+    }
+
+    public Map<Integer, List<YogaClass>> mapYogaClassesToCourses(List<YogaClass> yogaClasses, List<YogaCourse> yogaCourses) {
+        Map<Integer, List<YogaClass>> mappedClasses = new HashMap<>();
+
+        // Iterate through yoga classes and group them by courseId
+        for (YogaClass yogaClass : yogaClasses) {
+            int courseId = yogaClass.getCourseId();
+
+            if (mappedClasses.containsKey(courseId)) {
+                mappedClasses.get(courseId).add(yogaClass);
+            } else {
+                List<YogaClass> classList = new ArrayList<>();
+                classList.add(yogaClass);
+                mappedClasses.put(courseId, classList);
+            }
+        }
+
+        // Iterate through yoga courses and update the class list
+        for (YogaCourse yogaCourse : yogaCourses) {
+            int courseId = yogaCourse.getId();
+            if (mappedClasses.containsKey(courseId)) {
+                yogaCourse.setClassList(mappedClasses.get(courseId));
+            }
+        }
+
+        return mappedClasses;
+    }
+
+    private class UploadTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            String jsonPayload = params[0];
+            try {
+                return sendPostRequest(jsonPayload);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "Upload failed: " + e.getMessage();
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Log.d("UploadYogaCourses", result);
+        }
+    }
+
+    private void trustAllHosts() {
+        // Create a trust manager that does not validate certificate chains
+        TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                return new java.security.cert.X509Certificate[] {};
+            }
+
+            public void checkClientTrusted(X509Certificate[] chain,
+                                           String authType) throws CertificateException {
+            }
+
+            public void checkServerTrusted(X509Certificate[] chain,
+                                           String authType) throws CertificateException {
+            }
+        } };
+
+        // Install the all-trusting trust manager
+        try {
+            SSLContext sc = SSLContext.getInstance("TLS");
+            sc.init(null, trustAllCerts, new java.security.SecureRandom());
+            HttpsURLConnection
+                    .setDefaultSSLSocketFactory(sc.getSocketFactory());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        db.close();
+        dbHelper.close(); // Close the database
+        super.onDestroy();
+    }
 
 }

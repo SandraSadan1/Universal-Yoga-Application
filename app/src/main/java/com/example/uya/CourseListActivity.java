@@ -51,7 +51,7 @@ public class CourseListActivity extends AppCompatActivity {
     private static final String[] YOGA_CLASS_COLUMNS = {MyDatabaseHelper.ID, MyDatabaseHelper.COURSE_ID,
             MyDatabaseHelper.DAY, MyDatabaseHelper.COURSE_TIME, MyDatabaseHelper.TEACHER_NAME,
             MyDatabaseHelper.DATE, MyDatabaseHelper.COMMENTS};
-    private static final String WEB_SERVICE_URL = "https://stuiis.cms.gre.ac.uk/COMP1424CoreWS/comp1424cw";
+    private static final String WEB_SERVICE_URL = "https://stuiis.cms.gre.ac.uk/COMP1424CoreWS/comp1424cw/SubmitClasses";
     private Button uploadButton;
     //Button uploadButton = findViewById(R.id.btnupload);
 
@@ -405,7 +405,7 @@ public class CourseListActivity extends AppCompatActivity {
     private String sendPutRequest(String jsonPayload) throws Exception {
         URL url = new URL(WEB_SERVICE_URL);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("PUT");
+        connection.setRequestMethod("POST");
         connection.setRequestProperty("Content-Type", "application/json; utf-8");
         connection.setDoOutput(true);
 
