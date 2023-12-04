@@ -96,9 +96,10 @@
             android:contentDescription="Home Button"
             android:padding="8dp" />
         <Button
+            android:id="@+id/btnupload"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Upload">
+            android:text="Upload Courses">
 
         </Button>
     </LinearLayout>
