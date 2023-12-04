@@ -8,11 +8,14 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -84,19 +88,17 @@ public class CourseDetailsActivity extends AppCompatActivity {
         texttype = findViewById(R.id.texttype);
         textdescription = findViewById(R.id.textdescription);
 
+        uploadButton = findViewById(R.id.btnupload);
+
         // Initially, set the visibility of cardViewItem to GONE
         cardViewItem.setVisibility(View.GONE);
 
         yogaCourses = getCourseDetails();
-
-        adapter = new CourseDetailsAdapter(yogaCourses);
-        recyclerView.setAdapter(adapter);
-
+        populatelist();
         // Show the CardView with details for the first item when the adapter is bound
         if (!yogaCourses.isEmpty()) {
             showCourseDetails(yogaCourses.get(0));
         }
-
         // Set up Home Icon Click
         ImageView imageViewHome = findViewById(R.id.homeButton);
         imageViewHome.setOnClickListener(new View.OnClickListener() {
@@ -106,20 +108,56 @@ public class CourseDetailsActivity extends AppCompatActivity {
             }
         });
 
-        uploadButton = findViewById(R.id.btnupload);
         uploadButton.setOnClickListener(view -> uploadYogaData());
     }
 
-    private void showCourseDetails(YogaCourse yogaCourse) {
-        cardViewItem.setVisibility(View.VISIBLE);
-        textViewDay.setText("Day: " + yogaCourse.getDay());
-        texttime.setText("Time: " + yogaCourse.getTimeOfCourse());
-        textduration.setText("Duration: " + yogaCourse.getDuration());
-        textprice.setText("Price(£): " + String.valueOf(yogaCourse.getPrice()));
-        textcapacity.setText("Capacity: " + yogaCourse.getCapacity());
-        texttype.setText("Yoga Type: " + yogaCourse.getYogaType());
-        textdescription.setText("Description: " + yogaCourse.getDescription());
 
+    private void populatelist(){
+        List<YogaCourse> data = getCourseDetails();
+        if (data.isEmpty()) {
+            TableRow noDataRow = new TableRow(this);
+            TextView noDataTextView = new TextView(this);
+            noDataTextView.setText("No Data Available");
+            noDataTextView.setGravity(Gravity.CENTER);
+            noDataTextView.setPaddingRelative(400,100,10,50);
+            noDataTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
+            noDataTextView.setTextColor(ContextCompat.getColor(this, R.color.redColor)); // Adjust the color as needed
+
+            noDataRow.addView(noDataTextView);
+
+            // Add the noDataRow to the layout
+            ((ViewGroup) recyclerView.getParent()).addView(noDataRow);
+
+            // Hide the recyclerView
+            recyclerView.setVisibility(View.GONE);
+            // Disable the button
+            if (uploadButton != null) {
+                uploadButton.setEnabled(false);
+            }
+        } else {
+            // Show the recyclerView
+            recyclerView.setVisibility(View.VISIBLE);
+
+            // Enable the button
+            if (uploadButton != null) {
+                uploadButton.setEnabled(true);
+            }
+
+            // Set up the adapter when data is available
+            adapter = new CourseDetailsAdapter(yogaCourses);
+            recyclerView.setAdapter(adapter);
+        }
+    }
+
+    private void showCourseDetails(YogaCourse yogaCourse) {
+            cardViewItem.setVisibility(View.VISIBLE);
+            textViewDay.setText("Day: " + yogaCourse.getDay());
+            texttime.setText("Time: " + yogaCourse.getTimeOfCourse());
+            textduration.setText("Duration: " + yogaCourse.getDuration());
+            textprice.setText("Price(£): " + String.valueOf(yogaCourse.getPrice()));
+            textcapacity.setText("Capacity: " + yogaCourse.getCapacity());
+            texttype.setText("Yoga Type: " + yogaCourse.getYogaType());
+            textdescription.setText("Description: " + yogaCourse.getDescription());
 
     }
 
@@ -167,8 +205,6 @@ public class CourseDetailsActivity extends AppCompatActivity {
 
         return yogaCourses;
     }
-
-
     private void deleteCourse(int courseId) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         try {
@@ -184,6 +220,8 @@ public class CourseDetailsActivity extends AppCompatActivity {
             db.close();
         }
     }
+
+
 
     private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
@@ -243,7 +281,7 @@ public class CourseDetailsActivity extends AppCompatActivity {
 
                 textViewDayItem.setText("Day        : " + yogaCourse.getDay());
                 textViewTimeItem.setText("Time       : " + yogaCourse.getTimeOfCourse());
-                textViewDurationItem.setText("Duration   : " + yogaCourse.getDuration());
+                textViewDurationItem.setText("Duration   : " + yogaCourse.getDuration() + " minutes");
                 textViewPriceItem.setText("Price(£)   : " + yogaCourse.getPrice());
                 textViewCapacityItem.setText("Capacity   : " + yogaCourse.getCapacity());
                 textViewTypeItem.setText("Yoga Type  : " + yogaCourse.getYogaType());
