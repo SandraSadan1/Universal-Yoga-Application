@@ -88,6 +88,8 @@ public class CourseDetailsActivity extends AppCompatActivity {
         texttype = findViewById(R.id.texttype);
         textdescription = findViewById(R.id.textdescription);
 
+        uploadButton = findViewById(R.id.btnupload);
+
         // Initially, set the visibility of cardViewItem to GONE
         cardViewItem.setVisibility(View.GONE);
 
@@ -106,7 +108,6 @@ public class CourseDetailsActivity extends AppCompatActivity {
             }
         });
 
-        uploadButton = findViewById(R.id.btnupload);
         uploadButton.setOnClickListener(view -> uploadYogaData());
     }
 
@@ -114,7 +115,6 @@ public class CourseDetailsActivity extends AppCompatActivity {
     private void populatelist(){
         List<YogaCourse> data = getCourseDetails();
         if (data.isEmpty()) {
-            //uploadButton.setVisibility(View.GONE);
             TableRow noDataRow = new TableRow(this);
             TextView noDataTextView = new TextView(this);
             noDataTextView.setText("No Data Available");
@@ -130,9 +130,18 @@ public class CourseDetailsActivity extends AppCompatActivity {
 
             // Hide the recyclerView
             recyclerView.setVisibility(View.GONE);
+            // Disable the button
+            if (uploadButton != null) {
+                uploadButton.setEnabled(false);
+            }
         } else {
             // Show the recyclerView
             recyclerView.setVisibility(View.VISIBLE);
+
+            // Enable the button
+            if (uploadButton != null) {
+                uploadButton.setEnabled(true);
+            }
 
             // Set up the adapter when data is available
             adapter = new CourseDetailsAdapter(yogaCourses);
